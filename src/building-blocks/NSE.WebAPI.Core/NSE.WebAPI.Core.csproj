@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.4.0"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.7"/>
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.7"/>
+<!--    <PackageReference Include="NetDevPack.Security.JwtExtensions" Version="8.0.0"/>-->
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.13.0"/>
+  </ItemGroup>
+
+  <ItemGroup Label="Databases">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4"/>
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.6"/>
+  </ItemGroup>
+
+  <ItemGroup Label="HealthCheck">
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="8.0.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="8.0.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="8.0.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NSE.Core\NSE.Core.csproj" />
+    <ProjectReference Include="..\NSE.Security\NSE.Security.csproj" />
+  </ItemGroup>
+
+</Project>
