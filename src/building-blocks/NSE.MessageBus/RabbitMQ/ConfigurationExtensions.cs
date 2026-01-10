@@ -1,7 +1,7 @@
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 
-namespace NSE.MessageBus;
+namespace NSE.MessageBus.RabbitMQ;
 
 public static class ConfigurationExtensions
 {

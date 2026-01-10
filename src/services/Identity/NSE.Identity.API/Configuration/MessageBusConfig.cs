@@ -1,13 +1,15 @@
 using System.Reflection;
-using NSE.MessageBus;
+using NSE.MessageBus.RabbitMQ;
 
 namespace NSE.Identity.API.Configuration;
 
 public static class MessageBusConfig
 {
-    public static void AddMessageBusConfiguration(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void AddMessageBusConfiguration(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        services.AddMessageBus(configuration, Assembly.GetAssembly(typeof(Program)));
+        services.AddRabbitMqMessageBus(configuration, Assembly.GetAssembly(typeof(Program)));
     }
 }

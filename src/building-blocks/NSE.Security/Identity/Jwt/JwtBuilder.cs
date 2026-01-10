@@ -99,7 +99,6 @@ public class JwtBuilder <TIdentityUser, TKey> : IJwtBuilder
     public IJwtBuilder WithUserClaims()
     {
         _useClaims = true;
-
         return this;
     }
 

@@ -41,7 +41,6 @@ public class Argon2Id<TUser> : IPasswordHasher<TUser> where TUser : class
 
     public PasswordVerificationResult VerifyHashedPassword(TUser user, string hashedPassword, string providedPassword)
     {
-
         ArgumentNullException.ThrowIfNull(user);
         ArgumentNullException.ThrowIfNull(hashedPassword);
         ArgumentNullException.ThrowIfNull(providedPassword);

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace NSE.Core.Messages;
+namespace NSE.Core.Messages.Base;
 
 public class Event : Message, INotification
 {

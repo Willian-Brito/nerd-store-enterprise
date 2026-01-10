@@ -10,5 +10,6 @@ public static class DatabaseProviderDetector
     /// </summary>
     public static (DatabaseType, string) Detect(IConfiguration configuration) => (
         configuration.GetValue<DatabaseType>("AppSettings:DatabaseType", DatabaseType.None),
-        configuration.GetConnectionString("DefaultConnection"));
+        configuration.GetConnectionString("DefaultConnection")
+    );
 }

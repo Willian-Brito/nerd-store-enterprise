@@ -3,12 +3,15 @@ using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NSE.MessageBus;
+namespace NSE.MessageBus.RabbitMQ;
 
 public static class DependencyInjectionExtensions
 {
-    public static void AddMessageBus(this IServiceCollection services, IConfiguration configuration,
-        params Assembly[] consumerAssemblies)
+    public static void AddRabbitMqMessageBus(
+        this IServiceCollection services, 
+        IConfiguration configuration,
+        params Assembly[] consumerAssemblies
+    )
     {
         services.AddOptions<RabbitMqTransportOptions>()
             .Bind(configuration.GetSection(nameof(RabbitMqTransportOptions)))

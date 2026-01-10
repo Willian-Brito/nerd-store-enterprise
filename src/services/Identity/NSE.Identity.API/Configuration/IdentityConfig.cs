@@ -1,21 +1,8 @@
-// using Microsoft.AspNetCore.Identity;
-// // using NetDevPack.Identity.Jwt;
-// // using NetDevPack.Identity.Jwt;
-// // using NetDevPack.Security.PasswordHasher.Core;
-// using NSE.Security.PasswordHasher.Core;
-// using NSE.Identity.API.Data;
-// using NSE.WebAPI.Core.DatabaseFlavor;
-// using NSE.WebAPI.Core.Identity;
-
 using Microsoft.AspNetCore.Identity;
 using NSE.Identity.API.Data;
 using NSE.Security.Identity.Jwt;
 using NSE.Security.PasswordHasher.Core;
 using NSE.WebAPI.Core.DatabaseFlavor;
-// using NSE.WebAPI.Core.Identity;
-// using NetDevPack.Identity.Jwt;
-
-// using NSE.WebAPI.Core.Identity;
 
 namespace NSE.Identity.API.Configuration;
 

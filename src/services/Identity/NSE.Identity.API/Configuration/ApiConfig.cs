@@ -1,12 +1,5 @@
-
-// using NSE.WebAPI.Core.Configuration;
-// using NSE.WebAPI.Core.User;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NSE.Security.Identity.User;
+using NSE.WebAPI.Core.Configuration;
 
 namespace NSE.Identity.API.Configuration;
 
@@ -15,9 +8,8 @@ public static class ApiConfig
     public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers();
-
         services.AddScoped<IAspNetUser, AspNetUser>();
-        // services.AddDefaultHealthCheck(configuration);
+        services.AddDefaultHealthCheck(configuration);
 
         return services;
     }
@@ -35,8 +27,8 @@ public static class ApiConfig
 
         app.UseRouting();
         app.UseAuthConfiguration();
-        // app.UseJwksDiscovery();
-        // app.UseDefaultHealthcheck();
+        app.UseJwksDiscovery();
+        app.UseDefaultHealthcheck();
 
         return app;
     }
