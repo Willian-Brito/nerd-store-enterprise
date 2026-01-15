@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.DependencyInjection;
+using NSE.Core.Utilities;
 
 namespace NSE.WebAPI.Core.Extensions;
 
@@ -26,7 +27,7 @@ public static class HttpExtensions
         var path = Environment.GetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path");
         var certPass = Environment.GetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password");
 
-        if (Directory.Exists(path))
+        if (path.IsPresent())
         {
             return new HttpClientHandler
             {

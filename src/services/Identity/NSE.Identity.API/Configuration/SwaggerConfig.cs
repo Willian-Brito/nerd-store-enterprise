@@ -21,8 +21,7 @@ public static class SwaggerConfig
         {
             c.SwaggerDoc("v1", new OpenApiInfo()
             {
-                Title = "NerdStore Enterprise Identity API",
-                Description = "Esta API faz parte do curso ASP.NET Core Enterprise Applications.",
+                Title = "NerdStore Enterprise Identity API",                
                 Contact = new OpenApiContact() { Name = "Willian Brito", Email = "contato@nerdstore.io" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/Licenses/MIT") }
             });

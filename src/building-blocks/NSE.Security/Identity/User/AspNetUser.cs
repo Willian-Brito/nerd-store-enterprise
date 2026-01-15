@@ -16,15 +16,25 @@ public class AspNetUser : IAspNetUser
 
     public Guid GetUserId()
     {
-        return IsAutenticated() ? Guid.Parse(_accessor.HttpContext.User.GetUserId()) : Guid.Empty;
+        return IsAuthenticated() ? Guid.Parse(_accessor.HttpContext.User.GetUserId()) : Guid.Empty;
     }
 
     public string GetUserEmail()
     {
-        return IsAutenticated() ? _accessor.HttpContext.User.GetUserEmail() : "";
+        return IsAuthenticated() ? _accessor.HttpContext.User.GetUserEmail() : "";
+    }
+    
+    public string GetUserToken()
+    {
+        return IsAuthenticated() ? _accessor.HttpContext.User.GetUserToken() : "";
+    }
+    
+    public string GetUserRefreshToken()
+    {
+        return IsAuthenticated() ? _accessor.HttpContext.User.GetUserRefreshToken() : "";
     }
 
-    public bool IsAutenticated()
+    public bool IsAuthenticated()
     {
         return _accessor.HttpContext.User.Identity.IsAuthenticated;
     }

@@ -8,7 +8,9 @@ public interface IAspNetUser
     string Name { get; }
     Guid GetUserId();
     string GetUserEmail();
-    bool IsAutenticated();
+    string GetUserToken();
+    string GetUserRefreshToken();
+    bool IsAuthenticated();
     bool IsInRole(string role);
     IEnumerable<Claim> GetUserClaims();
     HttpContext GetHttpContext();

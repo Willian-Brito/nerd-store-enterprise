@@ -1,0 +1,31 @@
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <h3 id="msgRetorno">Ops! Something went wrong :(</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* <div style="padding-top: 20px" asp-validation-summary="All" class="text-danger"></div> *@
+    </div>
+}
+
+@{
+    if (TempData["Errors"] is IEnumerable<string> messageNerdStoreError && messageNerdStoreError.Any())
+    {
+        <div style="padding-top: 15px;"></div>
+
+        <div class="alert alert-danger alert-dismissible fade show">
+            <h3 id="msgRetorno">Oops! Something got wrong :(</h3>
+
+            <ul>
+                @{
+                    foreach (var erro in messageNerdStoreError)
+                    {
+                        <li>@erro</li>
+                    }
+                }
+
+            </ul>
+        </div>
+    }
+}
