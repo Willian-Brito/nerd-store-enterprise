@@ -3,9 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using NSE.Security.Jwt.Core.Model;
 using NSE.Security.Jwt.Store.EntityFrameworkCore;
 
-// using NetDevPack.Security.Jwt.Core.Model;
-// using NetDevPack.Security.Jwt.Store.EntityFrameworkCore;
-
 namespace NSE.Identity.API.Data;
 
 public class ApplicationDbContext : IdentityDbContext, ISecurityKeyContext

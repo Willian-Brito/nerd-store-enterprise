@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using NSE.Security.Identity.User;
 using NSE.WebAPI.Core.Extensions;
 using NSE.WebApp.MVC.Extensions.Annotations;
+using NSE.WebApp.MVC.Extensions.Retry;
 using NSE.WebApp.MVC.Services.Auth;
+using NSE.WebApp.MVC.Services.Catalog;
+using NSE.WebApp.MVC.Services.Handlers;
 using Polly;
 
 namespace NSE.WebApp.MVC.Configuration;
@@ -15,19 +18,19 @@ public static class DependencyInjectionConfig
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IAspNetUser, AspNetUser>();
 
-        // services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
-        //
+        services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+
         services
-            .AddHttpClient<IAuthService, AuthService>();
-            // .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+            .AddHttpClient<IAuthService, AuthService>()
+            .AddPolicyHandler(PollyExtensions.WaitAndRetry())
             // .AllowSelfSignedCertificate()
-        // .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-        //
-        // services.AddHttpClient<ICatalogService, CatalogService>()
-        //     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-        //     .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+        .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+        
+        services.AddHttpClient<ICatalogService, CatalogService>()
+            .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+        .AddPolicyHandler(PollyExtensions.WaitAndRetry())
         //     .AllowSelfSignedCertificate()
-        //     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+        .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
         //
         // services.AddHttpClient<ICheckoutBffService, CheckoutBffService>()
         //     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
@@ -42,25 +45,3 @@ public static class DependencyInjectionConfig
         //     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
     }
 }
-
-// public static class PollyExtensions
-// {
-//     public static AsyncRetryPolicy<HttpResponseMessage> WaitAndRetry()
-//     {
-//         var retry = HttpPolicyExtensions
-//             .HandleTransientHttpError()
-//             .WaitAndRetryAsync(new[]
-//             {
-//                 TimeSpan.FromSeconds(1),
-//                 TimeSpan.FromSeconds(5),
-//                 TimeSpan.FromSeconds(10)
-//             }, (outcome, timespan, retryCount, context) =>
-//             {
-//                 Console.ForegroundColor = ConsoleColor.Blue;
-//                 Console.WriteLine($"Tentando pela {retryCount} vez!");
-//                 Console.ForegroundColor = ConsoleColor.White;
-//             });
-//
-//         return retry;
-//     }
-// }

@@ -55,12 +55,20 @@ public static class WebAppConfig
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthConfiguration();
+
+        var supportedCultures = new[] { "en-US", "pt-BR" };
+        app.UseRequestLocalization(options =>
+        {
+            options.SetDefaultCulture(supportedCultures[1])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+        });
+
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseDefaultHealthcheck();
         app.MapControllerRoute(
             "default",
-            // "{controller=Catalog}/{action=Index}/{id?}"
-            "{controller=Home}/{action=Index}/{id?}"
+            "{controller=Catalog}/{action=Index}/{id?}"
         );
     }
 }

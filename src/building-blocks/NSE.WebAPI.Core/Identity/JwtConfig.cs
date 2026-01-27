@@ -6,15 +6,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using NSE.Security.Jwt.Extensions;
-// using NetDevPack.Security.JwtExtensions;
 using NSE.WebAPI.Core.Extensions;
 
 namespace NSE.WebAPI.Core.Identity;
 
 public static class JwtConfig
 {
-    public static void AddJwtConfiguration(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void AddJwtConfiguration(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var appSettingsSection = configuration.GetSection("AppSettings");
         services.Configure<JwkOptions>(appSettingsSection);
@@ -24,13 +25,16 @@ public static class JwtConfig
         if(Debugger.IsAttached)
             IdentityModelEventSource.ShowPII = true;
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-        {
-            options.RequireHttpsMetadata = false;
-            options.BackchannelHttpHandler = HttpExtensions.ConfigureClientHandler();
-            options.SaveToken = true;
-            options.SetJwksOptions(jwkOptions);
-        });
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.BackchannelHttpHandler = HttpExtensions.ConfigureClientHandler();
+                    options.SaveToken = true;
+                    options.SetJwksOptions(jwkOptions);
+                }
+            );
 
         services.AddAuthorization();
     }

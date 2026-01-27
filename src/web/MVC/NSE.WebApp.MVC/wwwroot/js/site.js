@@ -1,6 +1,5 @@
 ﻿function CreditCard() {
-
-
+    
     if ($("#card_number").length > 0) {
         $("#card_number").validateCreditCard(function (e) {
 

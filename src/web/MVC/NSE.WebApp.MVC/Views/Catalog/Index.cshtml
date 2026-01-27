@@ -1,0 +1,61 @@
+@using NSE.WebApp.MVC.Extensions.Helpers
+@model PagedViewModel<ProductViewModel>
+
+@{
+    ViewData["Title"] = "Awesome products for developers, geeks and nerds :)";
+}
+
+<section>
+    <div>
+        <div
+            style="background-image: url(images/banners/Template.jpg); height: 100%; background-position: center; background-repeat: no-repeat; background-size: cover">
+            <div style="text-align: center;">
+                <img src="~/images/banners/nerdstore.png"/>
+            </div>
+        </div>
+        <div class="container" style="padding-top: 20px">
+            <div class="row">
+                @{
+                    if (Model.Items.Any())
+                    {
+                        foreach (var product in Model.Items.Where(p => p.Active).OrderBy(p => p.Name))
+                        {
+                            <div class="col-md-3">
+                                <div href="#" class="card card-product-grid">
+                                    <a asp-controller="Catalog" asp-action="ProductDetails" asp-route-id="@product.Id"
+                                       class="img-wrap">
+                                        <img src="~/images/catalog/@product.Image" alt="@product.Name">
+                                    </a>
+                                    <figcaption class="info-wrap">
+                                        <a asp-controller="Catalog" asp-action="ProductDetails"
+                                           asp-route-id="@product.Id" class="title">
+                                            <b> @product.Name</b>
+                                        </a>
+
+                                        <small class="card-text">
+                                            @(this.StockMessage(product.Stock))<br/><br/>
+                                            @product.Description
+                                        </small>
+                                    </figcaption>
+                                    <div class="card-footer price mt-1">
+                                        <h3>@(this.FormatMoney(product.Price))</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-12" style="text-align: center">
+                            <h2>Oh no! 😮 <br><br> There's no products available. Try searching with another criteria
+                            </h2>
+                        </div>
+                    }
+                }
+            </div>
+
+            <vc:paging paging-model="@Model"></vc:paging>
+
+        </div>
+    </div>
+</section>

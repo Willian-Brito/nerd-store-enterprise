@@ -2,7 +2,6 @@ using System.Net;
 using Grpc.Core;
 using NSE.WebApp.MVC.Services.Auth;
 using Polly.CircuitBreaker;
-using Refit;
 
 namespace NSE.WebApp.MVC.Extensions.Middleware;
 
@@ -25,14 +24,6 @@ public class ExceptionMiddleware
             await _next(httpContext);
         }
         catch (CustomHttpRequestException ex)
-        {
-            await HandleRequestExceptionAsync(httpContext, ex.StatusCode);
-        }
-        catch (ValidationApiException ex)
-        {
-            await HandleRequestExceptionAsync(httpContext, ex.StatusCode);
-        }
-        catch (ApiException ex)
         {
             await HandleRequestExceptionAsync(httpContext, ex.StatusCode);
         }
