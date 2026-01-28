@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using NSE.Catalog.API.Data.Repository.Products;
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Data.Models.Interfaces;
+using NSE.Catalog.API.Models.Entities;
 using NSE.WebAPI.Core.Controllers;
 using NSE.WebAPI.Core.Structures;
 
-namespace DevStore.Catalog.API.Controllers;
+namespace NSE.Catalog.API.Controllers;
 
-[Route("catalog")]
+[Route("api/catalog")]
 public class CatalogController : MainController
 {
     private readonly IProductRepository _productRepository;

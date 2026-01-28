@@ -14,7 +14,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7"/>
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.7"/>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.7"/>
-<!--    <PackageReference Include="NetDevPack" Version="8.0.2"/>-->
   </ItemGroup>
 
   <ItemGroup>

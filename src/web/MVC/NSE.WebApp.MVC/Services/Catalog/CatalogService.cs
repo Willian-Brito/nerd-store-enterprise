@@ -19,7 +19,7 @@ public class CatalogService : Service, ICatalogService
 
     public async Task<ProductViewModel> GetById(Guid id)
     {
-        var response = await _httpClient.GetAsync($"/catalog/products/{id}");
+        var response = await _httpClient.GetAsync($"/api/catalog/products/{id}");
         ManageResponseErrors(response);
 
         return await DeserializeResponse<ProductViewModel>(response);
@@ -27,7 +27,7 @@ public class CatalogService : Service, ICatalogService
 
     public async Task<PagedViewModel<ProductViewModel>> GetAll(int pageSize, int pageIndex, string query = null)
     {
-        var response = await _httpClient.GetAsync($"/catalog/products?ps={pageSize}&page={pageIndex}&q={query}");
+        var response = await _httpClient.GetAsync($"/api/catalog/products?ps={pageSize}&page={pageIndex}&q={query}");
         ManageResponseErrors(response);
 
         return await DeserializeResponse<PagedViewModel<ProductViewModel>>(response);

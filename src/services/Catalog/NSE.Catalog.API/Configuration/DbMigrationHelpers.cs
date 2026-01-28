@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NSE.Catalog.API.Data;
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Models.Entities;
 using NSE.WebAPI.Core.Configuration;
 
 namespace NSE.Catalog.API.Configuration;

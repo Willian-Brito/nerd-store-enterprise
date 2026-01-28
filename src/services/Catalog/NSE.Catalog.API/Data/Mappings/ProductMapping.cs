@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Models.Entities;
 
 namespace NSE.Catalog.API.Data.Mappings;
 

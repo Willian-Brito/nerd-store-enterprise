@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NSE.Core.Data;
 using NSE.Security.Identity.User;
 
@@ -27,6 +29,25 @@ public abstract class BaseDbContext : DbContext
             ApplyAuditInfo();
         
         return await base.SaveChangesAsync(cancellationToken);
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if(!optionsBuilder.IsConfigured)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .AddJsonFile("appsettings.Production.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+            
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+    
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseNpgsql(connectionString);
+        }        
     }
     
     private bool HasAuditableEntitiesTracked()

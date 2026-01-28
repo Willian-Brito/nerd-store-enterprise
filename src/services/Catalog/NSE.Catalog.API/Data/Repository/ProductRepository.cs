@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using NSE.Catalog.API.Data.Models.Interfaces;
 using NSE.Core.Data;
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Models.Entities;
 using NSE.WebAPI.Core.Extensions;
 using NSE.WebAPI.Core.Structures;
 
-namespace NSE.Catalog.API.Data.Repository.Products;
+namespace NSE.Catalog.API.Data.Repository;
 
 public class ProductRepository : IProductRepository
 {

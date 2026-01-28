@@ -17,10 +17,10 @@ public class SocialNumberAttribute : ValidationAttribute
 
 public class SocialNumberAttributeAdapter : AttributeAdapterBase<SocialNumberAttribute>
 {
-    public SocialNumberAttributeAdapter(SocialNumberAttribute attribute, IStringLocalizer stringLocalizer) : base(
-        attribute, stringLocalizer)
-    {
-    }
+    public SocialNumberAttributeAdapter(
+        SocialNumberAttribute attribute, 
+        IStringLocalizer stringLocalizer
+    ) : base(attribute, stringLocalizer) { }
 
     public override void AddValidation(ClientModelValidationContext context)
     {

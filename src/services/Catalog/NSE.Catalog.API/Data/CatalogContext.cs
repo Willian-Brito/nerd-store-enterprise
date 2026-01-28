@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NSE.Core.Data;
 using NSE.Core.Messages.Base;
 using FluentValidation.Results;
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Models.Entities;
 using NSE.Security.Identity.User;
 using NSE.WebAPI.Core.DatabaseFlavor;
 
@@ -31,24 +31,5 @@ public class CatalogContext : BaseDbContext, IUnitOfWork
             property.SetColumnType("varchar(100)");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogContext).Assembly);
-    }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if(!optionsBuilder.IsConfigured)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile("appsettings.Development.json", optional: true)
-                .AddJsonFile("appsettings.Production.json", optional: true)
-                .AddEnvironmentVariables()
-                .Build();
-            
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-    
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseNpgsql(connectionString);
-        }        
     }
 }

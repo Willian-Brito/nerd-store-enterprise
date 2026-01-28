@@ -1,7 +1,7 @@
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Models.Entities;
 using NSE.WebAPI.Core.Structures;
 
-namespace NSE.Catalog.API.Data.Repository.Products;
+namespace NSE.Catalog.API.Data.Models.Interfaces;
 
 public interface IProductRepository
 {

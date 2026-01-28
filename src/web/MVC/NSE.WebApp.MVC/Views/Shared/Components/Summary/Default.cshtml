@@ -4,8 +4,7 @@
     <div class="alert alert-danger alert-dismissible fade show">
         <h3 id="msgRetorno">Ops! Something went wrong :(</h3>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @* <div style="padding-top: 20px" asp-validation-summary="All" class="text-danger"></div> *@
+        <div asp-validation-summary="All" class="text-danger"></div>
     </div>
 }
 
@@ -24,7 +23,6 @@
                         <li>@erro</li>
                     }
                 }
-
             </ul>
         </div>
     }

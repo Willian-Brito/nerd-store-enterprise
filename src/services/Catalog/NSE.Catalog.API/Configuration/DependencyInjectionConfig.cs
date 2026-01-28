@@ -1,5 +1,6 @@
 using NSE.Catalog.API.Data;
-using NSE.Catalog.API.Data.Repository.Products;
+using NSE.Catalog.API.Data.Models.Interfaces;
+using NSE.Catalog.API.Data.Repository;
 
 namespace NSE.Catalog.API.Configuration;
 
