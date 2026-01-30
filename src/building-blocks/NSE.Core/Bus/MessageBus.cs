@@ -7,6 +7,11 @@ namespace NSE.Core.Bus;
 public class MessageBus : IMessageBus
 {
     private readonly IMediator _mediator;
+
+    public MessageBus(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
     
     public async Task PublishEvent<T>(T @event) where T : Event
     {

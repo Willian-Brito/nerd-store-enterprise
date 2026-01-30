@@ -1,6 +1,6 @@
 namespace NSE.Catalog.API.Services;
 
-public class CatalogIntegrationHandler
+public class CatalogIntegrationHandler : BackgroundService
 {
     // private readonly IBus _bus;
     private readonly IServiceProvider _serviceProvider;
@@ -8,6 +8,11 @@ public class CatalogIntegrationHandler
     public CatalogIntegrationHandler(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+    
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        throw new NotImplementedException();
     }
     
     // public async Task Consume(ConsumeContext<OrderAuthorizedIntegrationEvent> context)

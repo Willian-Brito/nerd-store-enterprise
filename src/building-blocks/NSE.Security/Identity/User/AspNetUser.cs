@@ -35,8 +35,8 @@ public class AspNetUser : IAspNetUser
     }
 
     public bool IsAuthenticated()
-    {
-        return _accessor.HttpContext.User.Identity.IsAuthenticated;
+    {        
+        return _accessor?.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
     }
 
     public bool IsInRole(string role)

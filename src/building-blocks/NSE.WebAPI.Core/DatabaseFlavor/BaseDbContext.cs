@@ -57,7 +57,7 @@ public abstract class BaseDbContext : DbContext
     
     private void ApplyAuditInfo()
     {
-        var userId = _user?.GetUserId() ?? Guid.Empty;
+        var userId = _user?.GetHttpContext() != null ? _user.GetUserId() : Guid.Empty;
 
         foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
         {

@@ -46,17 +46,13 @@ Check these online courses at [desenvolvedor.io](https://desenvolvedor.io) (only
 
 - Components / Services
     - RabbitMQ
-    - EasyNetQ
-    - Refit
+    - EasyNetQ    
     - Polly
     - Bogus
     - Dapper
     - FluentValidator
     - MediatR
     - Swagger UI with JWT support
-    - NetDevPack
-    - NetDevPack.Identity
-    - NetDevPack.Security.JWT
 
 - Hosting
     - IIS
@@ -141,6 +137,10 @@ You will need:
 - Docker
 - MS-SQL Server instance (or container)
 - RabbitMQ
+
+```bash
+docker run -d --hostname rabbit-host --name rabbit-nerdstore -p 15672:15672 -p 5672:5672 rabbitmq:management
+```
 
 So you can edit the Docker compose to just run the database and queue dependencies and save your time.
 

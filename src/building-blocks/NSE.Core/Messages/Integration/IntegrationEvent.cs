@@ -2,4 +2,4 @@ using NSE.Core.Messages.Base;
 
 namespace NSE.Core.Messages.Integration;
 
-public class IntegrationEvent : Event { }
+public abstract class IntegrationEvent : Event { }

@@ -52,7 +52,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.ShoppingCart.API", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.WebAPI.Core", "src\building-blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj", "{AD177F1B-7187-4D6C-A21E-7E3C9CAED3EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.MessageBus", "src\building-blocks\NSE.MessageBus\NSE.MessageBus.csproj", "{105FE42B-0C41-45B4-95A2-905591002AA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.Queue", "src\building-blocks\NSE.Queue\NSE.Queue.csproj", "{105FE42B-0C41-45B4-95A2-905591002AA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.Security", "src\building-blocks\NSE.Security\NSE.Security.csproj", "{E2883C23-671E-46B0-810F-1F9B0516D9A9}"
 EndProject
