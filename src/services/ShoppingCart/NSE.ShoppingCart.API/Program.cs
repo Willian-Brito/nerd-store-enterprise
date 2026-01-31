@@ -1,44 +1,31 @@
+using Microsoft.AspNetCore.Authorization;
+using NSE.ShoppingCart.API.Configuration;
+using NSE.ShoppingCart.API.Endpoints;
+using NSE.ShoppingCart.API.Models;
+using NSE.WebAPI.Core.Identity;
+
+#region Configure Services
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddApiConfiguration(builder.Configuration);
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.AddSwaggerConfiguration();
+builder.Services.RegisterServices();
+builder.Services.AddQueueConfiguration(builder.Configuration);
+#endregion
 
+#region Configure Pipeline
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwaggerConfiguration();
+app.UseApiConfiguration(app.Environment);
+DbMigrationHelpers.EnsureSeedData(app).Wait();
+#endregion
 
-app.UseHttpsRedirection();
+#region Endpoints
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+app.MapShoppingCartEndpoints();
 app.Run();
+#endregion
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+

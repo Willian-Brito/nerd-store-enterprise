@@ -17,7 +17,7 @@ public static class SwaggerConfig
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "Insira o token JWT desta maneira: Bearer {seu token}",
+                Description = "Add you JWT token: Bearer {token}",
                 Name = "Authorization",
                 Scheme = "Bearer",
                 BearerFormat = "JWT",

@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using NSE.Security.Identity.User;
-using NSE.WebAPI.Core.Extensions;
 using NSE.WebApp.MVC.Extensions.Annotations;
 using NSE.WebApp.MVC.Extensions.Retry;
 using NSE.WebApp.MVC.Services.Auth;
 using NSE.WebApp.MVC.Services.Catalog;
+using NSE.WebApp.MVC.Services.CheckoutBff;
+using NSE.WebApp.MVC.Services.Customer;
 using NSE.WebApp.MVC.Services.Handlers;
 using Polly;
 
@@ -31,17 +32,17 @@ public static class DependencyInjectionConfig
         .AddPolicyHandler(PollyExtensions.WaitAndRetry())
         //     .AllowSelfSignedCertificate()
         .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-        //
-        // services.AddHttpClient<ICheckoutBffService, CheckoutBffService>()
-        //     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-        //     .AddPolicyHandler(PollyExtensions.WaitAndRetry())
-        //     .AllowSelfSignedCertificate()
-        //     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-        //
+        
+        services.AddHttpClient<ICheckoutBffService, CheckoutBffService>()
+            .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+            .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+            // .AllowSelfSignedCertificate()
+            .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+        
         // services.AddHttpClient<ICustomerService, CustomerService>()
         //     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
         //     .AddPolicyHandler(PollyExtensions.WaitAndRetry())
-        //     .AllowSelfSignedCertificate()
+        //     // .AllowSelfSignedCertificate()
         //     .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
     }
 }

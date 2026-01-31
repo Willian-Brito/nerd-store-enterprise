@@ -8,8 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.71.0"/>
+    <PackageReference Include="Grpc.Tools" Version="2.72.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
+    <ProjectReference Include="..\..\..\building-blocks\NSE.Security\NSE.Security.csproj" />
+    <ProjectReference Include="..\..\..\building-blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
   </ItemGroup>
 
 </Project>
