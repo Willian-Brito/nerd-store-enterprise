@@ -7,7 +7,7 @@ using NSE.Core.Communication;
 using NSE.Core.Utilities;
 using NSE.Security.Identity.User;
 using NSE.WebApp.MVC.Extensions;
-using NSE.WebApp.MVC.Models;
+using NSE.WebApp.MVC.ViewModel;
 
 namespace NSE.WebApp.MVC.Services.Auth;
 

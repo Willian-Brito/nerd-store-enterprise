@@ -1,4 +1,4 @@
-namespace NSE.WebApp.MVC.Models;
+namespace NSE.WebApp.MVC.ViewModel;
 public class ProductViewModel
 {
     public Guid Id { get; set; }

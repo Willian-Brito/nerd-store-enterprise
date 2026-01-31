@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using NSE.WebApp.MVC.Models;
+using NSE.WebApp.MVC.ViewModel;
 using NSE.WebApp.MVC.Services.Auth;
 
 namespace NSE.WebApp.MVC.Controllers;

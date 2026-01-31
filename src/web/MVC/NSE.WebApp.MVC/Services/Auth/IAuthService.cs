@@ -1,4 +1,4 @@
-using NSE.WebApp.MVC.Models;
+using NSE.WebApp.MVC.ViewModel;
 
 namespace NSE.WebApp.MVC.Services.Auth;
 

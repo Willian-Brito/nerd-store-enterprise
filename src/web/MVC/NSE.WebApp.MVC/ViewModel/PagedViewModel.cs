@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NSE.WebApp.MVC.Models;
+namespace NSE.WebApp.MVC.ViewModel;
 
 public class PagedViewModel<T> : IPagedList where T : class
 {

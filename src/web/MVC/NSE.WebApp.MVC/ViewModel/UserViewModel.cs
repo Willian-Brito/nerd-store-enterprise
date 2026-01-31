@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using NSE.Core.Communication;
 using NSE.WebApp.MVC.Extensions.Annotations;
 
-namespace NSE.WebApp.MVC.Models;
+namespace NSE.WebApp.MVC.ViewModel;
 
 public class UserRegister
 {
