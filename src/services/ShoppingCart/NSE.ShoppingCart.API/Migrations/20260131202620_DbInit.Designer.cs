@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NSE.ShoppingCart.API.Migrations
 {
     [DbContext(typeof(ShoppingCartContext))]
-    [Migration("20260130202419_DbInit")]
+    [Migration("20260131202620_DbInit")]
     partial class DbInit
     {
         /// <inheritdoc />
@@ -102,13 +102,12 @@ namespace NSE.ShoppingCart.API.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Code")
-                                .IsRequired()
                                 .HasColumnType("varchar(50)");
 
                             b1.Property<decimal?>("Discount")
                                 .HasColumnType("numeric");
 
-                            b1.Property<int>("DiscountType")
+                            b1.Property<int?>("DiscountType")
                                 .HasColumnType("integer");
 
                             b1.Property<decimal?>("Percentage")

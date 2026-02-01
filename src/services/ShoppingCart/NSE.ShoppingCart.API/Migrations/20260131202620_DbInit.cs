@@ -22,8 +22,8 @@ namespace NSE.ShoppingCart.API.Migrations
                     Discount = table.Column<decimal>(type: "numeric", nullable: false),
                     Voucher_Percentage = table.Column<decimal>(type: "numeric", nullable: true),
                     Voucher_Discount = table.Column<decimal>(type: "numeric", nullable: true),
-                    Voucher_Code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Voucher_DiscountType = table.Column<int>(type: "integer", nullable: false)
+                    Voucher_Code = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Voucher_DiscountType = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {

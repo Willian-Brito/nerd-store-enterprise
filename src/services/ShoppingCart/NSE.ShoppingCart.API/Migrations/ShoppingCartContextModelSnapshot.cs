@@ -99,13 +99,12 @@ namespace NSE.ShoppingCart.API.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Code")
-                                .IsRequired()
                                 .HasColumnType("varchar(50)");
 
                             b1.Property<decimal?>("Discount")
                                 .HasColumnType("numeric");
 
-                            b1.Property<int>("DiscountType")
+                            b1.Property<int?>("DiscountType")
                                 .HasColumnType("integer");
 
                             b1.Property<decimal?>("Percentage")

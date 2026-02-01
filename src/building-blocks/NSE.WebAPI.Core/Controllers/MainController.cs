@@ -24,23 +24,21 @@ public abstract class MainController : Controller
     
     protected ActionResult CustomResponse(ModelStateDictionary modelState)
     {
-        var errors = modelState.Values.SelectMany(e => e.Errors);
-        foreach (var error in errors) AddErrorToStack(error.ErrorMessage);
+        var errors = modelState.Values.SelectMany(e => e.Errors).ToList();
+        errors.ForEach(error => AddErrorToStack(error.ErrorMessage));
 
         return CustomResponse();
     }
     
     protected ActionResult CustomResponse(ValidationResult validationResult)
     {
-        foreach (var error in validationResult.Errors) AddErrorToStack(error.ErrorMessage);
-
+        validationResult.Errors.ForEach(error => AddErrorToStack(error.ErrorMessage));
         return CustomResponse();
     }
     
     protected ActionResult CustomResponse(ResponseResult responseResult)
     {
         ResponseHasErrors(responseResult);
-
         return CustomResponse();
     }
     
@@ -48,8 +46,7 @@ public abstract class MainController : Controller
     {
         if (responseResult == null || !responseResult.Errors.Messages.Any()) return false;
 
-        foreach (var errorMessage in responseResult.Errors.Messages) AddErrorToStack(errorMessage);
-
+        responseResult.Errors.Messages.ForEach(errorMessage => AddErrorToStack(errorMessage));
         return true;
     }
     

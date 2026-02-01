@@ -104,12 +104,13 @@
                                 </tbody>
                             </table>
 
-                            <div class="card-body border-top">
+                            <div class="card-body border-top" style="display: flex; justify-content: space-between;">
+                                <a asp-controller="Catalog" asp-action="Index" class="btn btn-light"> 
+                                    <i class="fa fa-chevron-left"></i> Buy more 
+                                </a>
                                 <a asp-controller="Order" asp-action="DeliveryAddress"
                                    class="btn btn-primary float-md-right"> Checkout <i class="fa fa-chevron-right"></i>
                                 </a>
-                                <a asp-controller="Catalog" asp-action="Index" class="btn btn-light"> <i
-                                        class="fa fa-chevron-left"></i> Buy more </a>
                             </div>
                         </div>
 

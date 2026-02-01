@@ -1,22 +1,22 @@
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NSE.Core.Communication;
-using NSE.WebApp.MVC.Extensions.Middleware;
 
-namespace NSE.WebApp.MVC.Services;
+namespace NSE.Bff.Checkout.Services;
 
 public abstract class Service
 {
-    protected StringContent GetContent(object data)
+    protected StringContent GetContent(object dado)
     {
         return new StringContent(
-            JsonSerializer.Serialize(data),
+            JsonSerializer.Serialize(dado),
             Encoding.UTF8,
             "application/json"
         );
     }
-    
+
     protected async Task<T> DeserializeResponse<T>(HttpResponseMessage responseMessage)
     {
         var options = new JsonSerializerOptions
@@ -30,26 +30,16 @@ public abstract class Service
 
         return JsonSerializer.Deserialize<T>(content, options);
     }
-    
-    protected bool ManageResponseErrors(HttpResponseMessage response)
+
+    protected bool ManageHttpResponse(HttpResponseMessage Response)
     {
-        switch ((int)response.StatusCode)
-        {
-            case 401:
-            case 403:
-            case 404:
-            case 500:
-                throw new CustomHttpRequestException(response.StatusCode);
+        if (Response.StatusCode == HttpStatusCode.BadRequest) return false;
 
-            case 400:
-                return false;
-        }
-
-        response.EnsureSuccessStatusCode();
+        Response.EnsureSuccessStatusCode();
         return true;
     }
-    
-    protected ResponseResult ReturnOk()
+
+    protected ResponseResult Ok()
     {
         return new ResponseResult();
     }

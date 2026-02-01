@@ -7,75 +7,75 @@ namespace NSE.WebApp.MVC.Services.CheckoutBff;
 
 public class CheckoutBffService : Service, ICheckoutBffService
 {
-    // private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
-    // public CheckoutBffService(HttpClient httpClient, IOptions<AppSettings> settings)
-    // {
-    //     _httpClient = httpClient;
-    //     _httpClient.BaseAddress = new Uri(settings.Value.CheckoutBffUrl);
-    // }
+    public CheckoutBffService(HttpClient httpClient, IOptions<AppSettings> settings)
+    {
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri(settings.Value.CheckoutBffUrl);
+    }
 
     #region ShoppingCart
 
-    // public async Task<ShoppingCartViewModel> GetShoppingCart()
-    // {
-    //     var response = await _httpClient.GetAsync("/orders/shopping-cart/");
+    public async Task<ShoppingCartViewModel> GetShoppingCart()
+    {
+        var response = await _httpClient.GetAsync("/bff/orders/shopping-cart/");
 
-    //     ManageResponseErrors(response);
+        ManageResponseErrors(response);
 
-    //     return await DeserializeResponse<ShoppingCartViewModel>(response);
-    // }
+        return await DeserializeResponse<ShoppingCartViewModel>(response);
+    }
 
-    // public async Task<int> GetShoppingCartItemsQuantity()
-    // {
-    //     var response = await _httpClient.GetAsync("/orders/shopping-cart/quantity/");
+    public async Task<int> GetShoppingCartItemsQuantity()
+    {
+        var response = await _httpClient.GetAsync("/bff/orders/shopping-cart/quantity/");
 
-    //     ManageResponseErrors(response);
+        ManageResponseErrors(response);
 
-    //     return await DeserializeResponse<int>(response);
-    // }
+        return await DeserializeResponse<int>(response);
+    }
 
-    // public async Task<ResponseResult> AddShoppingCartItem(ShoppingCartItemViewModel shoppingCart)
-    // {
-    //     var itemContent = GetContent(shoppingCart);
+    public async Task<ResponseResult> AddShoppingCartItem(ShoppingCartItemViewModel shoppingCart)
+    { 
+        var itemContent = GetContent(shoppingCart);
 
-    //     var response = await _httpClient.PostAsync("/orders/shopping-cart/items/", itemContent);
+        var response = await _httpClient.PostAsync("/bff/orders/shopping-cart/items/", itemContent);
 
-    //     if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
+        if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
 
-    //     return ReturnOk();
-    // }
+        return ReturnOk();
+    }
 
-    // public async Task<ResponseResult> UpdateShoppingCartItem(Guid productId, ShoppingCartItemViewModel shoppingCartItem)
-    // {
-    //     var itemContent = GetContent(shoppingCartItem);
+    public async Task<ResponseResult> UpdateShoppingCartItem(Guid productId, ShoppingCartItemViewModel shoppingCartItem)
+    {
+        var itemContent = GetContent(shoppingCartItem);
 
-    //     var response = await _httpClient.PutAsync($"/orders/shopping-cart/items/{productId}", itemContent);
+        var response = await _httpClient.PutAsync($"/bff/orders/shopping-cart/items/{productId}", itemContent);
 
-    //     if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
+        if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
 
-    //     return ReturnOk();
-    // }
+        return ReturnOk();
+    }
 
-    // public async Task<ResponseResult> RemoveItemFromShoppingCart(Guid productId)
-    // {
-    //     var response = await _httpClient.DeleteAsync($"/orders/shopping-cart/items/{productId}");
+    public async Task<ResponseResult> RemoveItemFromShoppingCart(Guid productId)
+    {
+        var response = await _httpClient.DeleteAsync($"/bff/orders/shopping-cart/items/{productId}");
 
-    //     if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
+        if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
 
-    //     return ReturnOk();
-    // }
+        return ReturnOk();
+    }
 
-    // public async Task<ResponseResult> ApplyVoucher(string voucher)
-    // {
-    //     var itemContent = GetContent(voucher);
+    public async Task<ResponseResult> ApplyVoucher(string voucher)
+    {
+        var itemContent = GetContent(voucher);
 
-    //     var response = await _httpClient.PostAsync("/orders/shopping-cart/apply-voucher/", itemContent);
+        var response = await _httpClient.PostAsync("/bff/orders/shopping-cart/apply-voucher/", itemContent);
 
-    //     if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
+        if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
 
-    //     return ReturnOk();
-    // }
+        return ReturnOk();
+    }
     #endregion
 
     #region Order

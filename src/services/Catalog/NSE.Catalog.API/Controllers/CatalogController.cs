@@ -23,7 +23,8 @@ public class CatalogController : MainController
         [FromQuery] string q = null
     )
     {
-        return await _productRepository.GetAll(ps, page, q);
+        var products = await _productRepository.GetAll(ps, page, q);
+        return products;
     }
 
     [HttpGet("products/{id}")]
