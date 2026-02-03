@@ -1,0 +1,66 @@
+@model TransactionViewModel
+@{
+    ViewData["Title"] = "New Address";
+}
+
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="myModalContent">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">@ViewData["Title"]</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form asp-action="NewAddress" asp-controller="Customer">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label asp-for="Address.ZipCode"></label>
+                            <input asp-for="Address.ZipCode" class="form-control"/>
+                            <span asp-validation-for="Address.ZipCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address.StreetAddress"></label>
+                            <input asp-for="Address.StreetAddress" class="form-control"/>
+                            <span asp-validation-for="Address.StreetAddress" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address.BuildingNumber"></label>
+                            <input asp-for="Address.BuildingNumber" class="form-control"/>
+                            <span asp-validation-for="Address.BuildingNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address.SecondaryAddress"></label>
+                            <input asp-for="Address.SecondaryAddress" class="form-control"/>
+                            <span asp-validation-for="Address.SecondaryAddress" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address.Neighborhood"></label>
+                            <input asp-for="Address.Neighborhood" class="form-control"/>
+                            <span asp-validation-for="Address.Neighborhood" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address.City"></label>
+                            <input asp-for="Address.City" class="form-control"/>
+                            <span asp-validation-for="Address.City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address.State"></label>
+                            <input asp-for="Address.State" class="form-control"/>
+                            <span asp-validation-for="Address.State" class="text-danger"></span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div>
+                                <input type="submit" value="Add Address" class="btn btn-success"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@ using NSE.Order.Domain.Entities.Vouchers;
 using NSE.Security.Identity.User;
 using NSE.WebAPI.Core.DatabaseFlavor;
 using NSE.WebAPI.Core.Extensions;
+using Entities = NSE.Order.Domain.Entities.Orders;
 
 namespace NSE.Order.Infra.Context;
 
@@ -17,10 +18,13 @@ public class OrdersContext : BaseDbContext, IUnitOfWork
     private readonly IConfiguration _configuration;
     private readonly IMessageBus _messageBus;
     
-    public DbSet<Domain.Entities.Orders.Order> Orders { get; set; }
+    public DbSet<Entities.Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Voucher> Vouchers { get; set; }
 
+    // EF Constructor
+    public OrdersContext() { }
+    
     public OrdersContext(
         DbContextOptions<OrdersContext> options, 
         IMessageBus messageBus,
@@ -48,13 +52,14 @@ public class OrdersContext : BaseDbContext, IUnitOfWork
 
         modelBuilder.Ignore<Event>();
         modelBuilder.Ignore<ValidationResult>();
-        modelBuilder.Entity<Domain.Entities.Orders.Order>().Property(p => p.Code).HasIdentityOptions(1000);
-
-        if (_configuration["AppSettings:DatabaseType"] == "Postgre")
-        {
-            modelBuilder.UseIdentityAlwaysColumns();
-            modelBuilder.Entity<Domain.Entities.Orders.Order>().Property(p => p.Code).UseIdentityAlwaysColumn();
-        }
+        modelBuilder.Entity<Entities.Order>().Property(p => p.Code).HasIdentityOptions(1000);
+        
+        // if (_configuration["AppSettings:DatabaseType"] == "Postgre")
+        // if (Database.IsNpgsql())
+        // {
+        //     modelBuilder.UseIdentityAlwaysColumns();
+        //     modelBuilder.Entity<Entities.Order>().Property(p => p.Code).UseIdentityAlwaysColumn();
+        // }
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrdersContext).Assembly);
 

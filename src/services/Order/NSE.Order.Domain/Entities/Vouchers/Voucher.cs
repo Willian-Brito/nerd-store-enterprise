@@ -48,10 +48,10 @@ public class Voucher : Entity, IAggregateRoot
         Active = false;
         Used = true;
         Quantity = 0;
-        UsedAt = DateTime.Now;
+        UsedAt = DateTime.UtcNow;
     }
 
-    public void GetOne()
+    public void DebitQuantity()
     {
         Quantity -= 1;
         if (Quantity >= 1) return;

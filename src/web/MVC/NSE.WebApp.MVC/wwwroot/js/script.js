@@ -24,8 +24,8 @@ $(document).ready(function() {
     
 
 	//////////////////////// Bootstrap tooltip
-	if($('[data-toggle="tooltip"]').length>0) {  // check if element exists
-		$('[data-toggle="tooltip"]').tooltip()
+	if($('[data-bs-toggle="tooltip"]').length>0) {  // check if element exists
+		$('[data-bs-toggle="tooltip"]').tooltip()
 	} // end if
 
 

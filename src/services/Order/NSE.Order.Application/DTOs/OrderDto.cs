@@ -26,7 +26,7 @@ public class OrderDto
             Id = order.Id,
             Code = order.Code,
             Status = (int)order.OrderStatus,
-            Date = order.DateAdded,
+            Date = order.CreatedAt,
             Amount = order.Amount,
             Discount = order.Discount,
             HasVoucher = order.HasVoucher,
@@ -34,7 +34,8 @@ public class OrderDto
             Address = new AddressDto()
         };
 
-        foreach (var item in order.OrderItems)
+        order.OrderItems.ToList().ForEach(item =>
+        {
             orderDTO.OrderItems.Add(new OrderItemDto
             {
                 Name = item.ProductName,
@@ -44,6 +45,7 @@ public class OrderDto
                 Price = item.Price,
                 OrderId = item.OrderId
             });
+        });
 
         orderDTO.Address = new AddressDto
         {

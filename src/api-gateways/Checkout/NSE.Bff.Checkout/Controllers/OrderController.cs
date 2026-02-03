@@ -70,10 +70,10 @@ public class OrderController : MainController
     {
         if (shoppingCart.Items.Count != products.Count())
         {
-            var itensIndisponiveis =
+            var unavailableItems =
                 shoppingCart.Items.Select(c => c.ProductId).Except(products.Select(p => p.Id)).ToList();
 
-            foreach (var itemId in itensIndisponiveis)
+            foreach (var itemId in unavailableItems)
             {
                 var cartItem = shoppingCart.Items.First(c => c.ProductId == itemId);
                 AddErrorToStack(

@@ -9,13 +9,12 @@ namespace NSE.Order.Infra.Repository;
 public class VoucherRepository : IVoucherRepository
 {
     private readonly OrdersContext _context;
+    public IUnitOfWork UnitOfWork => _context;
 
     public VoucherRepository(OrdersContext context)
     {
         _context = context;
     }
-
-    public IUnitOfWork UnitOfWork => _context;
 
     public async Task<Voucher> GetVoucherByCode(string code)
     {

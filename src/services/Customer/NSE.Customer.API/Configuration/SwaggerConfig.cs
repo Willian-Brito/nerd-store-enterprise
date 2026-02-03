@@ -10,7 +10,7 @@ public static class SwaggerConfig
         {
             c.SwaggerDoc("v1", new OpenApiInfo()
             {
-                Title = "NerdStore Enterprise Catalog API",                
+                Title = "NerdStore Enterprise Customer API",                
                 Contact = new OpenApiContact() { Name = "Willian Brito", Email = "contato@nerdstore.io" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/Licenses/MIT") }
             });

@@ -71,8 +71,8 @@ public class OrderRepository : IOrderRepository
 
         return await _context.Orders
             .Include(i => i.OrderItems)
-            .Where(o => o.CustomerId == customerId && o.DateAdded > fiveMinutesAgo && o.DateAdded <= DateTime.Now)
-            .OrderByDescending(o => o.DateAdded)
+            .Where(o => o.CustomerId == customerId && o.CreatedAt > fiveMinutesAgo && o.CreatedAt <= DateTime.UtcNow)
+            .OrderByDescending(o => o.CreatedAt)
             .FirstOrDefaultAsync();
     }
 
@@ -81,7 +81,7 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders
             .Include(i => i.OrderItems)
             .Where(o => o.OrderStatus == OrderStatus.Authorized)
-            .OrderBy(o => o.DateAdded)
+            .OrderBy(o => o.CreatedAt)
             .FirstOrDefaultAsync();
     }
 }

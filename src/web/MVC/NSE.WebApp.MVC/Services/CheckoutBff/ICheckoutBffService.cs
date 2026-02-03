@@ -14,8 +14,8 @@ public interface ICheckoutBffService
     Task<ResponseResult> ApplyVoucher(string voucher);
 
     // Order
-    // Task<ResponseResult> FinishOrder(TransactionViewModel transaction);
-    // Task<OrderViewModel> GetLastOrder();
-    // Task<IEnumerable<OrderViewModel>> GetCustomersById();
-    // TransactionViewModel MapToOrder(ShoppingCartViewModel shoppingCart, AddressViewModel address);
+    Task<ResponseResult> FinishOrder(TransactionViewModel transaction);
+    Task<OrderViewModel> GetLastOrder();
+    Task<IEnumerable<OrderViewModel>> GetCustomersById();
+    TransactionViewModel MapToOrder(ShoppingCartViewModel shoppingCart, AddressViewModel address);
 }

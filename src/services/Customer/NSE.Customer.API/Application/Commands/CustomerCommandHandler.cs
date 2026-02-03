@@ -30,7 +30,7 @@ public class CustomerCommandHandler : CommandHandler,
             message.ZipCode, 
             message.City, 
             message.State, 
-            message.CustomerId
+            message.CustomerId.Value
         );
         
         _customerRepository.AddAddress(address);

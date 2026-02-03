@@ -7,7 +7,7 @@ public class VoucherDateSpecification : Specification<Voucher>
 {
     public override Expression<Func<Voucher, bool>> ToExpression()
     {
-        return voucher => voucher.ExpirationDate >= DateTime.Now;
+        return voucher => voucher.ExpirationDate >= DateTime.UtcNow;
     }
 }
 

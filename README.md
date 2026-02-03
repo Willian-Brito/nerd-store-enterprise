@@ -48,8 +48,7 @@ Check these online courses at [desenvolvedor.io](https://desenvolvedor.io) (only
     - RabbitMQ
     - EasyNetQ    
     - Polly
-    - Bogus
-    - Dapper
+    - Bogus 
     - FluentValidator
     - MediatR
     - Swagger UI with JWT support

@@ -10,7 +10,7 @@ public static class QueueConfig
         IConfiguration configuration
     )
     {
-        var connectionString = configuration.GetConnectionString("MessageBus");
+        var connectionString = configuration.GetMessageQueueConnection("MessageBus");
         services.AddQueueRabbitMq(connectionString)
             .AddHostedService<OrderOrchestratorIntegrationHandler>()
             .AddHostedService<OrderIntegrationHandler>();

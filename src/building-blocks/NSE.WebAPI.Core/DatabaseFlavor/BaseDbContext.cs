@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using NSE.Core.Data;
 using NSE.Security.Identity.User;
@@ -33,21 +34,32 @@ public abstract class BaseDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if(!optionsBuilder.IsConfigured)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile("appsettings.Development.json", optional: true)
-                .AddJsonFile("appsettings.Production.json", optional: true)
-                .AddEnvironmentVariables()
-                .Build();
-            
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (optionsBuilder.IsConfigured) return;
+        
+        var configuration = BuildConfiguration();     
+        var dbOptions = DatabaseProviderDetector.Detect(configuration);
+        var contextType = GetType();
+        var method = typeof(ProviderSelector)
+            .GetMethod(nameof(ProviderSelector.WithProviderAutoSelection))!
+            .MakeGenericMethod(contextType);
+
+        var providerAction =
+            (Action<DbContextOptionsBuilder>)method.Invoke(null, new object[] { dbOptions })!;
     
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseNpgsql(connectionString);
-        }        
+        providerAction(optionsBuilder);
+        optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
+    
+    private static IConfiguration BuildConfiguration()
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+        return new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false)
+            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
     }
     
     private bool HasAuditableEntitiesTracked()
@@ -57,7 +69,8 @@ public abstract class BaseDbContext : DbContext
     
     private void ApplyAuditInfo()
     {
-        var userId = _user?.GetHttpContext() != null ? _user.GetUserId() : Guid.Empty;
+        var httpContext = _user?.GetHttpContext();
+        var userId = httpContext != null ? _user.GetUserId() : Guid.Empty;
 
         foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
         {

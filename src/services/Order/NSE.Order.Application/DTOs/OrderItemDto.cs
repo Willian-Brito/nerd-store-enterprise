@@ -13,7 +13,13 @@ public class OrderItemDto
 
     public static OrderItem ToOrderItem(OrderItemDto orderItemDto)
     {
-        return new OrderItem(orderItemDto.ProductId, orderItemDto.Name, orderItemDto.Quantity,
-            orderItemDto.Price, orderItemDto.Image);
+        var entity = new OrderItem(
+            orderItemDto.ProductId, 
+            orderItemDto.Name, 
+            orderItemDto.Quantity,
+            orderItemDto.Price, 
+            orderItemDto.Image
+        );
+        return entity;
     }
 }

@@ -1,0 +1,88 @@
+@using NSE.WebApp.MVC.Extensions.Helpers
+@model IEnumerable<OrderViewModel>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<section class="padding-y">
+    <div class="container">
+
+        @{
+            if (Model.Any())
+            {
+                foreach (var order in Model.OrderBy(p => p.Date))
+                {
+                    <div class="col-md-12" style="padding-bottom: 35px">
+                        <article class="card">
+                            <header class="card-header">
+                                <b class="d-inline-block mr-3">Order ID:
+                                    #@order.Code @Html.Raw(this.ShowStatus(order.Status))</b>
+                                <span>@order.Date.ToLongDateString()</span>
+                            </header>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6 class="text-muted">Payment</h6>
+                                        <span class="text-success">
+                                            <i class="fas fa-credit-card"></i>
+                                            Made by Credit Card
+                                        </span>
+
+                                        <p style="margin-top: 20px">
+                                            <span class="b">Amount: @(this.FormatMoney(order.Amount))</span>
+                                        </p>
+
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted">Delivery Address</h6>
+                                        <p>
+                                            @order.Address.ToString()
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <ul class="row">
+                                    @{
+                                        foreach (var item in order.OrderItems)
+                                        {
+                                            <li class="col-md-4">
+                                                <figure class="itemside  mb-3">
+                                                    <div class="aside">
+                                                        <img src="~/images/catalog/@item.Image" alt="@item.Name"
+                                                             class="border img-xs">
+                                                    </div>
+                                                    <figcaption class="info">
+                                                        <p>
+                                                            <b>@item.Name</b>
+                                                        </p>
+                                                        <span>@(this.UnitByProductAmount(item.Quantity, item.Price)) </span>
+                                                    </figcaption>
+                                                </figure>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-12" style="padding-bottom: 35px">
+                    <article class="card">
+                        <header class="card-header">
+                            <b class="d-inline-block mr-3">You don't have any orders! Shop with us!</b>
+                        </header>
+                        <div class="card-body">
+                            <div class="row">
+                                <a asp-controller="Catalog" asp-action="Index">Go shopping!</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        }
+    </div>
+</section>

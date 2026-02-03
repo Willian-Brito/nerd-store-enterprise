@@ -1,4 +1,8 @@
+using FluentValidation.Results;
+using MediatR;
 using NSE.Core.Bus;
+using NSE.Order.Application.Commands;
+using NSE.Order.Application.Events;
 using NSE.Order.Application.Queries.Order;
 using NSE.Order.Application.Queries.Voucher;
 using NSE.Order.Domain.Interfaces;
@@ -21,8 +25,14 @@ public static class DependencyInjectionConfig
         services.AddScoped<IVoucherQueries, VoucherQueries>();
         services.AddScoped<IOrderQueries, OrderQueries>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
+        
+        // Commands
+        services.AddScoped<IRequestHandler<AddOrderCommand, ValidationResult>, OrderCommandHandler>();
 
-        // Date
+        // Events
+        services.AddScoped<INotificationHandler<OrderDoneEvent>, OrderEventHandler>();
+        
+        // Data
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IVoucherRepository, VoucherRepository>();
         services.AddScoped<OrdersContext>();

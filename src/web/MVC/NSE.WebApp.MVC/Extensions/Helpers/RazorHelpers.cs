@@ -83,6 +83,6 @@ public static class RazorHelpers
                 break;
         }
 
-        return $"<span class='badge badge-{statusClass}'>{statusMessage}</span>";
+        return $"<span class='badge bg-{statusClass}'>{statusMessage}</span>";
     }
 }

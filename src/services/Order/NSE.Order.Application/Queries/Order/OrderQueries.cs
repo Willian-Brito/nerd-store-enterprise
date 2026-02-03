@@ -46,7 +46,7 @@ public class OrderQueries: IOrderQueries
             Code = order.Code,
             CustomerId = order.CustomerId,
             Status = (int)order.OrderStatus,
-            Date = order.DateAdded,
+            Date = order.CreatedAt,
             Amount = order.Amount,
             Discount = order.Discount,
             HasVoucher = order.HasVoucher,

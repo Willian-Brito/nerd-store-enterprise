@@ -103,7 +103,7 @@ public class OrderCommandHandler : CommandHandler,
         }
 
         order.AssociateVoucher(voucher);
-        voucher.GetOne();
+        voucher.DebitQuantity();
 
         _voucherRepository.Update(voucher);
 
@@ -134,6 +134,7 @@ public class OrderCommandHandler : CommandHandler,
 
     private async Task<bool> DoPayment(Entities.Order order, AddOrderCommand message)
     {
+        return true;
         var orderStarted = new OrderInitiatedIntegrationEvent
         {
             OrderId = order.Id,

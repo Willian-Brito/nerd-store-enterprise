@@ -1,11 +1,13 @@
 using FluentValidation;
 using NSE.Core.Messages.Base;
+using System.Text.Json.Serialization;
 
 namespace NSE.Customer.API.Application.Commands;
 
 public class AddAddressCommand : Command
 {
-    public Guid CustomerId { get; set; }
+    [JsonIgnore]
+    public Guid? CustomerId { get; set; }
     public string StreetAddress { get; set; }
     public string BuildingNumber { get; set; }
     public string SecondaryAddress { get; set; }

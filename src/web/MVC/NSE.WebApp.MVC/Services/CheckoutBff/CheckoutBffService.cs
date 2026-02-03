@@ -80,61 +80,61 @@ public class CheckoutBffService : Service, ICheckoutBffService
 
     #region Order
     
-    // public async Task<ResponseResult> FinishOrder(TransactionViewModel transaction)
-    // {
-    //     var orderContent = GetContent(transaction);
-    //
-    //     var response = await _httpClient.PostAsync("/orders", orderContent);
-    //
-    //     if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
-    //
-    //     return ReturnOk();
-    // }
-    //
-    // public async Task<OrderViewModel> GetLastOrder()
-    // {
-    //     var response = await _httpClient.GetAsync("/orders/last");
-    //
-    //     ManageResponseErrors(response);
-    //
-    //     return await DeserializeResponse<OrderViewModel>(response);
-    // }
-    //
-    // public async Task<IEnumerable<OrderViewModel>> GetCustomersById()
-    // {
-    //     var response = await _httpClient.GetAsync("/orders/customers");
-    //
-    //     ManageResponseErrors(response);
-    //
-    //     return await DeserializeResponse<IEnumerable<OrderViewModel>>(response);
-    // }
-    //
-    // public TransactionViewModel MapToOrder(ShoppingCartViewModel shoppingCart, AddressViewModel address)
-    // {
-    //     var order = new TransactionViewModel
-    //     {
-    //         Amount = shoppingCart.Total,
-    //         Items = shoppingCart.Items,
-    //         Discount = shoppingCart.Discount,
-    //         HasVoucher = shoppingCart.HasVoucher,
-    //         Voucher = shoppingCart.Voucher?.Voucher
-    //     };
-    //
-    //     if (address != null)
-    //     {
-    //         order.Address = new AddressViewModel
-    //         {
-    //             StreetAddress = address.StreetAddress,
-    //             BuildingNumber = address.BuildingNumber,
-    //             Neighborhood = address.Neighborhood,
-    //             ZipCode = address.ZipCode,
-    //             SecondaryAddress = address.SecondaryAddress,
-    //             City = address.City,
-    //             State = address.State
-    //         };
-    //     }
-    //     
-    //     return order;
-    // }
+    public async Task<ResponseResult> FinishOrder(TransactionViewModel transaction)
+    {
+        var orderContent = GetContent(transaction);
+    
+        var response = await _httpClient.PostAsync("/bff/orders", orderContent);
+    
+        if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
+    
+        return ReturnOk();
+    }
+    
+    public async Task<OrderViewModel> GetLastOrder()
+    {
+        var response = await _httpClient.GetAsync("/bff/orders/last");
+    
+        ManageResponseErrors(response);
+    
+        return await DeserializeResponse<OrderViewModel>(response);
+    }
+    
+    public async Task<IEnumerable<OrderViewModel>> GetCustomersById()
+    {
+        var response = await _httpClient.GetAsync("/bff/orders/customers");
+    
+        ManageResponseErrors(response);
+    
+        return await DeserializeResponse<IEnumerable<OrderViewModel>>(response);
+    }
+    
+    public TransactionViewModel MapToOrder(ShoppingCartViewModel shoppingCart, AddressViewModel address)
+    {
+        var order = new TransactionViewModel
+        {
+            Amount = shoppingCart.Total,
+            Items = shoppingCart.Items,
+            Discount = shoppingCart.Discount,
+            HasVoucher = shoppingCart.HasVoucher,
+            Voucher = shoppingCart.Voucher?.Code
+        };
+    
+        if (address != null)
+        {
+            order.Address = new AddressViewModel
+            {
+                StreetAddress = address.StreetAddress,
+                BuildingNumber = address.BuildingNumber,
+                Neighborhood = address.Neighborhood,
+                ZipCode = address.ZipCode,
+                SecondaryAddress = address.SecondaryAddress,
+                City = address.City,
+                State = address.State
+            };
+        }
+        
+        return order;
+    }
     #endregion
 }

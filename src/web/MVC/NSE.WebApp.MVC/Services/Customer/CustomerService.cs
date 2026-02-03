@@ -29,9 +29,10 @@ public class CustomerService : Service, ICustomerService
 
     public async Task<ResponseResult> AddAddress(AddressViewModel address)
     {
-        var enderecoContent = GetContent(address);
+        var addressContent = GetContent(address);    
+        var teste = addressContent.ToString();    
 
-        var response = await _httpClient.PostAsync("/api/customers/address", enderecoContent);
+        var response = await _httpClient.PostAsync("/api/customers/address", addressContent);
 
         if (!ManageResponseErrors(response)) return await DeserializeResponse<ResponseResult>(response);
 

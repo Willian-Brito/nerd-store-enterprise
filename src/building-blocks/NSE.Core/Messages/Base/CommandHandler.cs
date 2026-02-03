@@ -4,7 +4,7 @@ using NSE.Core.Data;
 namespace NSE.Core.Messages.Base;
 
 public abstract class CommandHandler
-{
+{    
     protected ValidationResult ValidationResult;
 
     protected CommandHandler()

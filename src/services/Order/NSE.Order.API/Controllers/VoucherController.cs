@@ -6,6 +6,7 @@ using NSE.WebAPI.Core.Controllers;
 
 namespace NSE.Order.API.Controllers;
 
+[Route("api/voucher")]
 public class VoucherController : MainController
 {
     private readonly IVoucherQueries _voucherQueries;
@@ -15,7 +16,7 @@ public class VoucherController : MainController
         _voucherQueries = voucherQueries;
     }
     
-    [HttpGet("voucher/{code}")]
+    [HttpGet("{code}")]
     [ProducesResponseType(typeof(VoucherDto), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> GetByCode(string code)

@@ -19,7 +19,8 @@ public class ShoppingCartController : MainController
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        return View(await _checkoutBffService.GetShoppingCart());
+        var shoppingCart = await _checkoutBffService.GetShoppingCart();
+        return View(shoppingCart);
     }
     
     [HttpPost]
