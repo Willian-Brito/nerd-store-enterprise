@@ -197,13 +197,13 @@ So you can edit the Docker compose to just run the database and queue dependenci
             "stopAtEntry": false
         },
         {
-            "name": "Customers API",
+            "name": "Customer API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/services/Customers/NSE.Customers.API/bin/Debug/net9.0/NSE.Customers.API.dll",
+            "program": "${workspaceFolder}/src/services/Customer/NSE.Customer.API/bin/Debug/net9.0/NSE.Customer.API.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/services/Customers/NSE.Customers.API",
+            "cwd": "${workspaceFolder}/src/services/Customer/NSE.Customer.API",
             "console": "internalConsole",
             "stopAtEntry": false
         },
@@ -219,13 +219,13 @@ So you can edit the Docker compose to just run the database and queue dependenci
             "stopAtEntry": false
         },
         {
-            "name": "Orders API",
+            "name": "Order API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/services/Orders/NSE.Orders.API/bin/Debug/net9.0/NSE.Orders.API.dll",
+            "program": "${workspaceFolder}/src/services/Order/NSE.Order.API/bin/Debug/net9.0/NSE.Order.API.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/services/Orders/NSE.Orders.API",
+            "cwd": "${workspaceFolder}/src/services/Order/NSE.Order.API",
             "console": "internalConsole",
             "stopAtEntry": false
         },
@@ -245,9 +245,9 @@ So you can edit the Docker compose to just run the database and queue dependenci
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/api-gateways/NSE.Bff.Checkout/bin/Debug/net9.0/NSE.Bff.Checkout.dll",
+            "program": "${workspaceFolder}/src/api-gateways/Checkout/NSE.Bff.Checkout/bin/Debug/net9.0/NSE.Bff.Checkout.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/api-gateways/NSE.Bff.Checkout",
+            "cwd": "${workspaceFolder}/src/api-gateways/Checkout/NSE.Bff.Checkout",
             "console": "internalConsole",
             "stopAtEntry": false
         }
@@ -259,16 +259,16 @@ So you can edit the Docker compose to just run the database and queue dependenci
                 "MVC WebApp",
                 "Payment API",
                 "Catalog API",
-                "Customers API",
+                "Customer API",
                 "Identity API",
-                "Orders API",
+                "Order API",
                 "ShoppingCart API",
                 "BFF Checkout"
             ],
             "stopAll": true
         }
     ]
-}      
+}    
 ```
 
 ## Disclaimer

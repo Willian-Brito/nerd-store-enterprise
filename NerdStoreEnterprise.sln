@@ -42,7 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.Order.API", "src\servic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{3FB03296-F262-2760-9861-73C41AF3766C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.Payment.DevPay", "src\services\Payment\NSE.Payment.DevPay\NSE.Payment.DevPay.csproj", "{CD4A152B-F661-435B-AF8A-0E3A3792E990}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.Payment.NerdPay", "src\services\Payment\NSE.Payment.NerdPay\NSE.Payment.NerdPay.csproj", "{CD4A152B-F661-435B-AF8A-0E3A3792E990}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSE.Payment.API", "src\services\Payment\NSE.Payment.API\NSE.Payment.API.csproj", "{E928E45F-6B15-4F5A-A856-C9F418EA10F6}"
 EndProject

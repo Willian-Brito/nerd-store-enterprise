@@ -19,9 +19,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\building-blocks\NSE.Core\NSE.Core.csproj" />
+    <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.Security\NSE.Security.csproj" />
     <ProjectReference Include="..\NSE.Order.Domain\NSE.Order.Domain.csproj"/>
+    <ProjectReference Include="..\NSE.Order.Application\NSE.Order.Application.csproj"/>
   </ItemGroup>
 
 </Project>

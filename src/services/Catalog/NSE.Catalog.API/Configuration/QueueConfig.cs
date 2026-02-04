@@ -1,5 +1,4 @@
-using System.Reflection;
-using NSE.Catalog.API.Services;
+using NSE.Catalog.API.Jobs;
 using NSE.Queue.RabbitMQ.Configuration;
 
 namespace NSE.Catalog.API.Configuration;
@@ -12,7 +11,7 @@ public static class QueueConfig
     )
     {
         var connectionString = configuration.GetMessageQueueConnection("MessageBus");
-        services.AddQueueRabbitMq(connectionString);
-            // .AddHostedService<CatalogIntegrationHandler>();
+        services.AddQueueRabbitMq(connectionString)
+            .AddHostedService<CatalogIntegrationJob>();
     }
 }

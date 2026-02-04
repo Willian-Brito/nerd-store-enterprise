@@ -10,8 +10,7 @@ public class Order : Entity, IAggregateRoot
     public Guid? VoucherId { get; private set; }
     public bool HasVoucher { get; private set; }
     public decimal Discount { get; private set; }
-    public decimal Amount { get; private set; }
-    // public DateTime DateAdded { get; private set; }
+    public decimal Amount { get; private set; }    
     public OrderStatus OrderStatus { get; private set; }
     public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
 

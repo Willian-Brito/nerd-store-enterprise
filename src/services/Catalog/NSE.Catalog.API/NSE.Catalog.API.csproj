@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="2.1.66"/>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
       <PrivateAssets>all</PrivateAssets>
@@ -19,6 +18,7 @@
     <ProjectReference Include="..\..\..\building-blocks\NSE.Core\NSE.Core.csproj"/>
     <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj"/>
+    <ProjectReference Include="..\..\Payment\NSE.Payment.API\NSE.Payment.API.csproj" />
   </ItemGroup>
 
 </Project>

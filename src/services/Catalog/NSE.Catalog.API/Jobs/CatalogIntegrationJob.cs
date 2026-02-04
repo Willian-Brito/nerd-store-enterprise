@@ -39,15 +39,16 @@ public class CatalogIntegrationJob : BackgroundService
         var productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
     
         var productsId = string.Join(",", message.Items.Select(c => c.Key));
-        var products = await productRepository.GetProductsById(productsId);
-    
-        if (products.Count != message.Items.Count)
+        var productsActives = await productRepository.GetProductsById(productsId);
+
+        var allIsActives = productsActives.Count == message.Items.Count;
+        if (!allIsActives)
         {
             await CancelOrderWithoutStock(message);
             return;
         }
     
-        foreach (var product in products)
+        foreach (var product in productsActives)
         {
             var productUnits = message.Items.FirstOrDefault(p => p.Key == product.Id).Value;
     
@@ -57,14 +58,15 @@ public class CatalogIntegrationJob : BackgroundService
             product.TakeFromInventory(productUnits);
             productsWithAvailableStock.Add(product);
         }
-    
-        if (productsWithAvailableStock.Count != message.Items.Count)
+
+        var hasStock = productsWithAvailableStock.Count == message.Items.Count;
+        if (!hasStock)
         {
             await CancelOrderWithoutStock(message);
             return;
         }
     
-        foreach (var product in productsWithAvailableStock) productRepository.Update(product);
+        productsWithAvailableStock.ForEach(product => productRepository.Update(product));
     
         if (!await productRepository.UnitOfWork.Commit())
             throw new DomainException($"Problems updating stock for order {message.OrderId}");

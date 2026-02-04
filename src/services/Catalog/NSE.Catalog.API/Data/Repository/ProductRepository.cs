@@ -43,8 +43,10 @@ public class ProductRepository : IProductRepository
 
         var idsValue = idsGuid.Select(id => id.Value);
 
-        return await _context.Products.AsNoTracking()
-            .Where(p => idsValue.Contains(p.Id) && p.Active).ToListAsync();
+        return await _context.Products
+            .AsNoTracking()
+            .Where(p => idsValue.Contains(p.Id) && p.Active)
+            .ToListAsync();
     }
 
     public void Add(Product product)

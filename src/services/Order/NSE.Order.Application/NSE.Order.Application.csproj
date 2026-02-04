@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.Core\NSE.Core.csproj" />
+    <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
     <ProjectReference Include="..\NSE.Order.Domain\NSE.Order.Domain.csproj" />
   </ItemGroup>
 

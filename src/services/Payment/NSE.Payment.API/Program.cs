@@ -1,36 +1,22 @@
+using NSE.Payment.API.Configuration;
+using NSE.WebAPI.Core.Configuration;
+using NSE.WebAPI.Core.Identity;
+
+#region Configure Services
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddApiConfiguration(builder.Configuration);
+builder.Services.AddQueueConfiguration(builder.Configuration);
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.RegisterServices();
+#endregion
 
+#region Configura Pipeline
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+await DbMigrationHelpers.EnsureSeedData(app);
+app.UseApiCoreConfiguration(app.Environment);
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+#endregion

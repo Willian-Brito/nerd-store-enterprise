@@ -1,4 +1,4 @@
-using NSE.Order.Application.Events;
+using NSE.Order.Infra.Jobs;
 using NSE.Queue.RabbitMQ.Configuration;
 
 namespace NSE.Order.API.Configuration;
@@ -12,7 +12,7 @@ public static class QueueConfig
     {
         var connectionString = configuration.GetMessageQueueConnection("MessageBus");
         services.AddQueueRabbitMq(connectionString)
-            .AddHostedService<OrderOrchestratorIntegrationHandler>()
-            .AddHostedService<OrderIntegrationHandler>();
+            .AddHostedService<OrderOrchestratorIntegrationJob>()
+            .AddHostedService<OrderIntegrationJob>();
     }
 }

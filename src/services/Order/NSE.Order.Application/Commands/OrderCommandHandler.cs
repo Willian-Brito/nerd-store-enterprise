@@ -134,13 +134,12 @@ public class OrderCommandHandler : CommandHandler,
 
     private async Task<bool> DoPayment(Entities.Order order, AddOrderCommand message)
     {
-        return true;
         var orderStarted = new OrderInitiatedIntegrationEvent
         {
             OrderId = order.Id,
             CustomerId = order.CustomerId,
             Amount = order.Amount,
-            PaymentType = 1, // fixed - change if we have more types
+            PaymentType = 1, // CreditCard: fixed - change if we have more types
             Holder = message.Holder,
             CardNumber = message.CardNumber,
             ExpirationDate = message.ExpirationDate,

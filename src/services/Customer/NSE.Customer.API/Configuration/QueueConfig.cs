@@ -1,5 +1,4 @@
-using System.Reflection;
-using NSE.Customer.API.Services;
+using NSE.Customer.API.Jobs;
 using NSE.Queue.RabbitMQ.Configuration;
 
 namespace NSE.Customer.API.Configuration;
@@ -13,6 +12,6 @@ public static class QueueConfig
     {
         var connectionString = configuration.GetMessageQueueConnection("MessageBus");
         services.AddQueueRabbitMq(connectionString)
-            .AddHostedService<NewCustomerIntegrationHandler>();
+            .AddHostedService<NewCustomerIntegrationJob>();
     }
 }

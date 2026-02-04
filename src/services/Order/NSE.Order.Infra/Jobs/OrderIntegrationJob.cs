@@ -39,12 +39,10 @@ public class OrderIntegrationJob : BackgroundService
     private async Task CancelOrder(OrderCanceledIntegrationEvent message)
     {
         using var scope = _serviceProvider.CreateScope();
-
         var orderRepository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
-
         var order = await orderRepository.GetById(message.OrderId);
+        
         order.Cancel();
-
         orderRepository.Update(order);
 
         if (!await orderRepository.UnitOfWork.Commit())
@@ -55,10 +53,9 @@ public class OrderIntegrationJob : BackgroundService
     {
         using var scope = _serviceProvider.CreateScope();
         var orderRepository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
-
         var order = await orderRepository.GetById(message.OrderId);
+        
         order.Finish();
-
         orderRepository.Update(order);
 
         if (!await orderRepository.UnitOfWork.Commit())

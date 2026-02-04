@@ -12,8 +12,8 @@ using NSE.Order.Infra.Context;
 namespace NSE.Order.Infra.Migrations
 {
     [DbContext(typeof(OrdersContext))]
-    [Migration("20260202205305_DbInit")]
-    partial class DbInit
+    [Migration("20260204211315_DBInit")]
+    partial class DBInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,7 +65,7 @@ namespace NSE.Order.Infra.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -102,18 +102,23 @@ namespace NSE.Order.Infra.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProductImage")
-                        .IsRequired()
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("varchar(250)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -166,7 +171,7 @@ namespace NSE.Order.Infra.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -195,37 +200,30 @@ namespace NSE.Order.Infra.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("BuildingNumber")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("BuildingNumber");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("City");
 
                             b1.Property<string>("Neighborhood")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("Neighborhood");
 
                             b1.Property<string>("SecondaryAddress")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("SecondaryAddress");
 
                             b1.Property<string>("State")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("State");
 
                             b1.Property<string>("StreetAddress")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("StreetAddress");
 
                             b1.Property<string>("ZipCode")
-                                .IsRequired()
                                 .HasColumnType("varchar(100)")
                                 .HasColumnName("ZipCode");
 
@@ -237,8 +235,7 @@ namespace NSE.Order.Infra.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.Navigation("Address")
-                        .IsRequired();
+                    b.Navigation("Address");
 
                     b.Navigation("Voucher");
                 });

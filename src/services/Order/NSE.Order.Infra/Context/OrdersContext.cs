@@ -1,5 +1,6 @@
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using NSE.Core.Bus;
 using NSE.Core.Data;
@@ -52,7 +53,11 @@ public class OrdersContext : BaseDbContext, IUnitOfWork
 
         modelBuilder.Ignore<Event>();
         modelBuilder.Ignore<ValidationResult>();
-        modelBuilder.Entity<Entities.Order>().Property(p => p.Code).HasIdentityOptions(1000);
+        modelBuilder.Entity<Entities.Order>()
+            .Property(p => p.Code)
+            .HasIdentityOptions(1000)
+            // .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore)
+            .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         
         // if (_configuration["AppSettings:DatabaseType"] == "Postgre")
         // if (Database.IsNpgsql())

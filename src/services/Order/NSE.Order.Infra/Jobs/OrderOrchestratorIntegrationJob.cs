@@ -5,7 +5,7 @@ using NSE.Core.Messages.Integration;
 using NSE.Order.Application.Queries.Order;
 using NSE.Queue.Abstractions;
 
-namespace NSE.Order.Application.Services;
+namespace NSE.Order.Infra.Jobs;
 
 public class OrderOrchestratorIntegrationJob : IHostedService, IDisposable
 {

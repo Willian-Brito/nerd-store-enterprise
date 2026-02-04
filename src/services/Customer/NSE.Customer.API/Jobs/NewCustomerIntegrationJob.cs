@@ -1,11 +1,10 @@
-using FluentValidation.Results;
 using NSE.Core.Bus;
 using NSE.Core.Messages.Base;
 using NSE.Core.Messages.Integration;
 using NSE.Customer.API.Application.Commands;
 using NSE.Queue.Abstractions;
 
-namespace NSE.Customer.API.Services;
+namespace NSE.Customer.API.Jobs;
 
 public class NewCustomerIntegrationJob : BackgroundService
 {

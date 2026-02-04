@@ -25,7 +25,7 @@ namespace NSE.Catalog.API.Migrations
                     Stock = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedBy = table.Column<Guid>(type: "uuid", nullable: true)

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NSE.Order.Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class DbInit : Migration
+    public partial class DBInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,7 +27,7 @@ namespace NSE.Order.Infra.Migrations
                     Used = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
@@ -50,16 +50,16 @@ namespace NSE.Order.Infra.Migrations
                     Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderStatus = table.Column<int>(type: "int", nullable: false),
-                    StreetAddress = table.Column<string>(type: "varchar(100)", nullable: false),
-                    BuildingNumber = table.Column<string>(type: "varchar(100)", nullable: false),
-                    SecondaryAddress = table.Column<string>(type: "varchar(100)", nullable: false),
-                    Neighborhood = table.Column<string>(type: "varchar(100)", nullable: false),
-                    ZipCode = table.Column<string>(type: "varchar(100)", nullable: false),
-                    City = table.Column<string>(type: "varchar(100)", nullable: false),
-                    State = table.Column<string>(type: "varchar(100)", nullable: false),
+                    StreetAddress = table.Column<string>(type: "varchar(100)", nullable: true),
+                    BuildingNumber = table.Column<string>(type: "varchar(100)", nullable: true),
+                    SecondaryAddress = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Neighborhood = table.Column<string>(type: "varchar(100)", nullable: true),
+                    ZipCode = table.Column<string>(type: "varchar(100)", nullable: true),
+                    City = table.Column<string>(type: "varchar(100)", nullable: true),
+                    State = table.Column<string>(type: "varchar(100)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
@@ -82,10 +82,12 @@ namespace NSE.Order.Infra.Migrations
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductName = table.Column<string>(type: "varchar(250)", nullable: false),
-                    ProductImage = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProductImage = table.Column<string>(type: "varchar(100)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
