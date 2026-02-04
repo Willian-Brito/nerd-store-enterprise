@@ -1,24 +1,30 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NSE.Core.Messages.Integration;
 using NSE.Order.Application.Queries.Order;
 using NSE.Queue.Abstractions;
 
-namespace NSE.Order.Application.Events;
+namespace NSE.Order.Application.Services;
 
-public class OrderOrchestratorIntegrationHandler : IHostedService, IDisposable
+public class OrderOrchestratorIntegrationJob : IHostedService, IDisposable
 {
+    private readonly ILogger<OrderOrchestratorIntegrationJob> _logger;
     private readonly IServiceProvider _serviceProvider;
     private Timer _timer;
 
-    public OrderOrchestratorIntegrationHandler(IServiceProvider serviceProvider)
+    public OrderOrchestratorIntegrationJob(
+        ILogger<OrderOrchestratorIntegrationJob> logger,
+        IServiceProvider serviceProvider
+    )
     {
         _serviceProvider = serviceProvider;
+        _logger = logger;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Order service initialized.");
+        _logger.LogInformation("Order service initialized.");
 
         _timer = new Timer(
             ProcessOrders, 
@@ -32,7 +38,7 @@ public class OrderOrchestratorIntegrationHandler : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Order service finished.");
+        _logger.LogInformation("Order service finished.");
 
         _timer?.Change(Timeout.Infinite, 0);
         return Task.CompletedTask;
@@ -55,7 +61,7 @@ public class OrderOrchestratorIntegrationHandler : IHostedService, IDisposable
         var queue = scope.ServiceProvider.GetRequiredService<IQueue>();
         await queue.PublishAsync(authorizedOrder);
 
-        Console.WriteLine($"Order ID: {order.Id} was sent to lower at stock.");
+        _logger.LogInformation($"Order ID: {order.Id} was sent to lower at stock.");
     }
     
     public void Dispose()

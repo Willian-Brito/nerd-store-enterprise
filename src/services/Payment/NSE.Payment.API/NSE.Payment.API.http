@@ -1,6 +1,0 @@
-@NSE.Payment.API_HostAddress = http://localhost:5124
-
-GET {{NSE.Payment.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

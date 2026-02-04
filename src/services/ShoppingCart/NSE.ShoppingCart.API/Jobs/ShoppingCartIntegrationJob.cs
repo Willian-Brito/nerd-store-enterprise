@@ -3,14 +3,14 @@ using NSE.Core.Messages.Integration;
 using NSE.Queue.Abstractions;
 using NSE.ShoppingCart.API.Data;
 
-namespace NSE.ShoppingCart.API.Services;
+namespace NSE.ShoppingCart.API.Jobs;
 
-public class ShoppingCartIntegrationHandler : BackgroundService
+public class ShoppingCartIntegrationJob : BackgroundService
 {
     private readonly IQueue _queue;
     private readonly IServiceProvider _serviceProvider;
 
-    public ShoppingCartIntegrationHandler(IServiceProvider serviceProvider, IQueue queue)
+    public ShoppingCartIntegrationJob(IServiceProvider serviceProvider, IQueue queue)
     {
         _serviceProvider = serviceProvider;
         _queue = queue;

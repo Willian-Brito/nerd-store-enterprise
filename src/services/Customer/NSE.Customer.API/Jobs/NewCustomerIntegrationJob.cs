@@ -7,12 +7,12 @@ using NSE.Queue.Abstractions;
 
 namespace NSE.Customer.API.Services;
 
-public class NewCustomerIntegrationHandler : BackgroundService
+public class NewCustomerIntegrationJob : BackgroundService
 {
     private readonly IQueue _queue; 
     private readonly IServiceProvider _serviceProvider;
     
-    public NewCustomerIntegrationHandler(
+    public NewCustomerIntegrationJob(
         IServiceProvider serviceProvider,
         IQueue queue
     )

@@ -5,14 +5,14 @@ using NSE.Core.Messages.Integration;
 using NSE.Order.Domain.Interfaces;
 using NSE.Queue.Abstractions;
 
-namespace NSE.Order.Application.Events;
+namespace NSE.Order.Infra.Jobs;
 
-public class OrderIntegrationHandler : BackgroundService
+public class OrderIntegrationJob : BackgroundService
 {
     private readonly IQueue _queue;
     private readonly IServiceProvider _serviceProvider;
 
-    public OrderIntegrationHandler(IServiceProvider serviceProvider, IQueue queue)
+    public OrderIntegrationJob(IServiceProvider serviceProvider, IQueue queue)
     {
         _serviceProvider = serviceProvider;
         _queue = queue;
