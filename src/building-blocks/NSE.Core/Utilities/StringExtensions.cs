@@ -13,6 +13,11 @@ public static class StringExtensions
     private static readonly Regex UrlizeRegex = new Regex(@"[^A-Za-z0-9_~]+", RegexOptions.Multiline | RegexOptions.Compiled);
     private static readonly Regex EmailRegex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", RegexOptions.Compiled);
 
+    public static string ToSearchable(this string str)
+    {
+        return str?.Trim() ?? string.Empty;
+    }
+
     public static string UrlEncode(this string url)
     {
         return Uri.EscapeDataString(url);

@@ -16,8 +16,11 @@ public class CatalogController : MainController
     [HttpGet]
     [Route("")]
     [Route("showcase")]
-    public async Task<IActionResult> Index([FromQuery] int ps = 8, [FromQuery] int page = 1,
-        [FromQuery] string q = null)
+    public async Task<IActionResult> Index(
+        [FromQuery] int ps = 8, 
+        [FromQuery] int page = 1,
+        [FromQuery] string q = null
+    )
     {
         var products = await _catalogService.GetAll(ps, page, q);
         ViewBag.Search = q;

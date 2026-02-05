@@ -56,7 +56,6 @@ public class OrdersContext : BaseDbContext, IUnitOfWork
         modelBuilder.Entity<Entities.Order>()
             .Property(p => p.Code)
             .HasIdentityOptions(1000)
-            // .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore)
             .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         
         // if (_configuration["AppSettings:DatabaseType"] == "Postgre")
