@@ -39,19 +39,19 @@ public static class ApiConfig
                 "Customer API",
                 tags: ["infra"],
                 configurePrimaryHttpMessageHandler: _ => HttpExtensions.ConfigureClientHandler()
+            )
+            .AddUrlGroup(
+                new Uri($"{configuration["PaymentUrl"]}/healthz-infra"), 
+                "Payment API",
+                tags: ["infra"],
+                configurePrimaryHttpMessageHandler: _ => HttpExtensions.ConfigureClientHandler()
+            )
+            .AddUrlGroup(
+                new Uri($"{configuration["OrderUrl"]}/healthz-infra"), 
+                "Order API", 
+                tags: ["infra"],
+                configurePrimaryHttpMessageHandler: _ => HttpExtensions.ConfigureClientHandler()
             );
-        // .AddUrlGroup(
-        //     new Uri($"{configuration["PaymentUrl"]}/healthz-infra"), 
-        //     "Payment API",
-        //     tags: ["infra"],
-        //     configurePrimaryHttpMessageHandler: _ => HttpExtensions.ConfigureClientHandler()
-        // )
-        // .AddUrlGroup(
-        //     new Uri($"{configuration["OrderUrl"]}/healthz-infra"), 
-        //     "Order API", 
-        //     tags: ["infra"],
-        //     configurePrimaryHttpMessageHandler: _ => HttpExtensions.ConfigureClientHandler()
-        // );
     }
     
     public static void UseApiConfiguration(this WebApplication app, IWebHostEnvironment env)

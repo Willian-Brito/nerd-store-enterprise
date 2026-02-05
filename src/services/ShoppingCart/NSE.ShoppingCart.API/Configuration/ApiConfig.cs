@@ -1,4 +1,5 @@
 using NSE.ShoppingCart.API.Data;
+using NSE.ShoppingCart.API.Services.gRPC;
 using NSE.WebAPI.Core.Configuration;
 
 namespace NSE.ShoppingCart.API.Configuration;
@@ -19,6 +20,6 @@ public static class ApiConfig
         app.UseAuthentication();
         app.UseAuthorization();
 
-        // app.MapGrpcService<ShoppingCartGrpcService>().RequireCors("Total");
+        app.MapGrpcService<ShoppingCartGrpcService>().RequireCors("Total");
     }
 }

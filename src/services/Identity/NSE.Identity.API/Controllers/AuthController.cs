@@ -166,7 +166,7 @@ public class AuthController : MainController
 
         var result = await handler.ValidateTokenAsync(jwt, new TokenValidationParameters
         {
-            ValidIssuer = "https://nerdstore.academy",
+            ValidIssuer = "https://nerdstore.io",
             ValidAudience = "NerdStore",
             ValidateAudience = true,
             ValidateIssuer = true,

@@ -109,14 +109,12 @@ public class AuthService : Service, IAuthService
         if (refreshToken.AccessToken == null || refreshToken.ResponseResult != null) return false;
         
         await DoLogin(refreshToken);
-        
         return true;
     }
     
     private async Task<UserLoginResponse> UseRefreshToken(string refreshToken)
     {
         var refreshTokenContent = GetContent(refreshToken);
-
         var response = await _httpClient.PostAsync("/api/identity/refresh-token", refreshTokenContent);
 
         if (!ManageResponseErrors(response))

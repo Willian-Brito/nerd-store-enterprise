@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSE.Bff.Checkout.DTOs;
 using NSE.Bff.Checkout.Services.Catalog;
+using NSE.Bff.Checkout.Services.gRPC;
 using NSE.Bff.Checkout.Services.Order;
 using NSE.Bff.Checkout.Services.ShoppingCart;
 using NSE.WebAPI.Core.Controllers;
@@ -15,30 +16,33 @@ public class ShoppingCartController : MainController
     private readonly ICatalogService _catalogService;
     private readonly IOrderService _orderService;
     private readonly IShoppingCartService _shoppingCartService;
+    private readonly IShoppingCartGrpcService _shoppingCartGrpcService;
 
     public ShoppingCartController(
         IShoppingCartService shoppingCartService,
         ICatalogService catalogService,
-        IOrderService orderService
+        IOrderService orderService,
+        IShoppingCartGrpcService shoppingCartGrpcService
     )
     {
         _shoppingCartService = shoppingCartService;
         _catalogService = catalogService;
         _orderService = orderService;
+        _shoppingCartGrpcService = shoppingCartGrpcService;
     }
     
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        return CustomResponse(await _shoppingCartService.GetShoppingCart());
+        return CustomResponse(await _shoppingCartGrpcService.GetShoppingCart());
     }
 
     [HttpGet]
     [Route("quantity")]
     public async Task<int> GetCartItemsQuantity()
     {
-        var shoppingCart = await _shoppingCartService.GetShoppingCart();
+        var shoppingCart = await _shoppingCartGrpcService.GetShoppingCart();
         return shoppingCart?.Items.Sum(i => i.Quantity) ?? 0;
     }
 
