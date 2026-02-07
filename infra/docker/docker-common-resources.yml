@@ -1,0 +1,112 @@
+name: nerdstore
+
+services:
+    
+    sql-server:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        container_name: nerdstore-mssql
+        ports:
+            - "1433:1433"
+        expose:
+            - 1433
+        environment:
+            SA_PASSWORD: "MyDB@123"
+            ACCEPT_EULA: "Y"
+        healthcheck:
+            test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P MyDB@123 -Q 'SELECT 1'" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s     
+
+    postgres:
+        image: postgres:16
+        container_name: nerdstore-postgres
+        ports:
+            - "5432:5432"
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123           
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s       
+    
+    rabbitmq:
+        image: rabbitmq:4.1
+        container_name: nerdstore-rabbit
+        hostname: rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        expose:
+            - 5672
+            - 15672
+        environment:
+            RABBITMQ_DEFAULT_USER: "nerdstore"
+            RABBITMQ_DEFAULT_PASS: "nerdstore"
+        healthcheck: # Add health check to ensure RabbitMQ is ready
+            test: [ "CMD", "rabbitmqctl", "status" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s
+    
+    logging:
+        image: datalust/seq:2025.1
+        container_name: nerdstore-seq
+        ports:
+            - 5341:80
+        environment:
+            ACCEPT_EULA: "Y"
+            SEQ_FIRSTRUN_ADMINPASSWORD: "MyAdminPassword"
+        healthcheck:
+            test: "/seqsvr/Client/seqcli node health -s http://localhost"
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s    
+    
+    generate-pfx:
+        image: emberstack/openssl:latest # last update October 2019
+        container_name: generate-pfx
+        volumes:
+            - ./certs:/https:rw
+            - nginx-certs:/nginx-certs:rw
+        command: >
+            sh -c "(
+                   rm -f /https/nerdstore.io-localhost.pfx &&
+                   openssl genrsa -out nerdstore.rsa 2048 &&
+                   openssl req -sha256 -new -key nerdstore.rsa -out nerdstore.csr -subj '/CN=localhost' &&
+                   openssl x509 -req -sha256 -days 365 -in nerdstore.csr -signkey nerdstore.rsa -out nerdstore.crt &&
+                   openssl pkcs12 -export -out /https/nerdstore.io-localhost.pfx -inkey nerdstore.rsa -in nerdstore.crt -password pass:9HoGMnb7Lu8NFdHBz4Vq2rtKivzMhmMXhtvuB4TZcLMmbWfFmDQCjJeLURAJ4GYe &&
+                   # Copy CRT and KEY files to the nginx-certs volume
+                   cp nerdstore.crt /nginx-certs/ &&
+                   cp nerdstore.rsa /nginx-certs/nerdstore.key)"           
+
+    nerdstore-server:        
+        image: nginx:1.29
+        container_name: nerdstore-server 
+        restart: always
+        volumes:
+            - ./nginx/nerdstore.conf:/etc/nginx/conf.d/default.conf:ro
+            - nginx-certs:/etc/nginx/certs:ro
+        ports:
+            - "7500:80"
+            - "7501:443"
+            - "7510:8080"
+            - "7511:4443"
+        depends_on:
+            generate-pfx:
+                condition: service_completed_successfully
+
+volumes:
+    dpkeys:
+    nginx-certs:
+    postgres-data:

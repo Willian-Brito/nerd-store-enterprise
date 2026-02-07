@@ -20,25 +20,25 @@ public static class DependencyInjectionConfig
 
         services.AddHttpClient<ICatalogService, CatalogService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            // .AllowSelfSignedCertificate()
+            .AllowSelfSignedCertificate()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
             .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
         services.AddHttpClient<IShoppingCartService, ShoppingCartService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            // .AllowSelfSignedCertificate()
+            .AllowSelfSignedCertificate()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
             .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
         services.AddHttpClient<IOrderService, OrderService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            // .AllowSelfSignedCertificate()
+            .AllowSelfSignedCertificate()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
             .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
         services.AddHttpClient<ICustomerService, CustomerService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            // .AllowSelfSignedCertificate()
+            .AllowSelfSignedCertificate()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
             .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
     }

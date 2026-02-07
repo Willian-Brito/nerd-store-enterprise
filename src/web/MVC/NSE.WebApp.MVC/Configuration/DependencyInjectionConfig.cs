@@ -24,25 +24,25 @@ public static class DependencyInjectionConfig
         services
             .AddHttpClient<IAuthService, AuthService>()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
-            // .AllowSelfSignedCertificate()
-        .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+            .AllowSelfSignedCertificate()
+            .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
         
         services.AddHttpClient<ICatalogService, CatalogService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-        .AddPolicyHandler(PollyExtensions.WaitAndRetry())
-        //     .AllowSelfSignedCertificate()
-        .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+            .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+            .AllowSelfSignedCertificate()
+            .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
         
         services.AddHttpClient<ICheckoutBffService, CheckoutBffService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
-            // .AllowSelfSignedCertificate()
+            .AllowSelfSignedCertificate()
             .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
         
         services.AddHttpClient<ICustomerService, CustomerService>()
             .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
             .AddPolicyHandler(PollyExtensions.WaitAndRetry())
-            // .AllowSelfSignedCertificate()
+            .AllowSelfSignedCertificate()
             .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
     }
 }

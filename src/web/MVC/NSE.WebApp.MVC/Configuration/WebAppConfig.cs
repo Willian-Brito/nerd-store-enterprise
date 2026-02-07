@@ -12,10 +12,10 @@ public static class WebAppConfig
     {
         services.AddControllersWithViews();
 
-        // services
-        //     .AddDataProtection()
-        //     .PersistKeysToFileSystem(new DirectoryInfo(@"/var/data_protection_keys/"))
-        //     .SetApplicationName("NerdStoreEnterprise");
+        services
+            .AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo(@"/var/data_protection_keys/"))
+            .SetApplicationName("NerdStoreEnterprise");
 
         services.Configure<ForwardedHeadersOptions>(options =>
         {
@@ -55,15 +55,6 @@ public static class WebAppConfig
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthConfiguration();
-
-        // var supportedCultures = new[] { "en-US", "pt-BR" };
-        // app.UseRequestLocalization(options =>
-        // {
-        //     options.SetDefaultCulture(supportedCultures[1])
-        //         .AddSupportedCultures(supportedCultures)
-        //         .AddSupportedUICultures(supportedCultures);
-        // });
-
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseDefaultHealthcheck();
         app.MapControllerRoute(

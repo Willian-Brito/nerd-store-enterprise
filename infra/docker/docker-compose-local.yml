@@ -1,0 +1,197 @@
+name: nerdstore
+
+x-common-variables: &common-variables
+    ASPNETCORE_ENVIRONMENT: Docker
+    ASPNETCORE_URLS: https://+:443;http://+:80
+    ASPNETCORE_Kestrel__Certificates__Default__Password: 9HoGMnb7Lu8NFdHBz4Vq2rtKivzMhmMXhtvuB4TZcLMmbWfFmDQCjJeLURAJ4GYe
+    ASPNETCORE_Kestrel__Certificates__Default__Path: /https/nerdstore.io-localhost.pfx
+    AppSettings__DatabaseType: Postgre
+    RabbitMqTransportOptions__Host: "rabbitmq"
+    RabbitMqTransportOptions__Port: 5672
+    RabbitMqTransportOptions__User: "nerdstore"
+    RabbitMqTransportOptions__Pass: "nerdstore"
+    RabbitMqTransportOptions__VirtualHost: "/"
+
+include:
+    - docker-common-resources.yml
+
+services:
+    
+    api-identity:
+        image: willianbrito00/nerdstore-api-identity:${TAG}
+        container_name: nerdstore-api-identity
+        build:
+            context: ../../src
+            dockerfile: ./services/Identity/NSE.Identity.API/Dockerfile        
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBUsers;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            generate-pfx:
+                condition: service_completed_successfully
+            postgres:
+                condition: service_started
+            logging:
+                condition: service_started
+            rabbitmq:
+                condition: service_started
+
+    api-cart:
+        image: willianbrito00/nerdstore-api-cart:${TAG}
+        container_name: nerdstore-api-cart
+        build:
+            context: ../../src
+            dockerfile: ./services/ShoppingCart/NSE.ShoppingCart.API/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBShoppingCart;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            api-identity:
+                condition: service_started
+
+    api-catalog:
+        image: willianbrito00/nerdstore-api-catalog:${TAG}
+        container_name: nerdstore-api-catalog
+        build:
+            context: ../../src
+            dockerfile: ./services/Catalog/NSE.Catalog.API/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBCatalog;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            api-identity:
+                condition: service_started
+
+    api-customers:
+        image: willianbrito00/nerdstore-api-customers:${TAG}
+        container_name: nerdstore-api-customers
+        build:
+            context: ../../src
+            dockerfile: ./services/Customer/NSE.Customer.API/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBCustomer;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            api-identity:
+                condition: service_started
+
+    api-order:
+        image: willianbrito00/nerdstore-api-order:${TAG}
+        container_name: nerdstore-api-order
+        build:
+            context: ../../src
+            dockerfile: ./services/Order/NSE.Order.API/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=sql-server,1433;Database=DBOrder;User Id=sa;Password=MyDB@123;TrustServerCertificate=True;"
+            AppSettings__DatabaseType: SqlServer
+            Logging__Console__FormatterName: ""
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            api-identity:
+                condition: service_started
+
+    api-payment:
+        image: willianbrito00/nerdstore-api-payment:${TAG}
+        container_name: nerdstore-api-payment
+        build:
+            context: ../../src
+            dockerfile: ./services/Payment/NSE.Payment.API/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBPayment;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            api-identity:
+                condition: service_started
+            api-order:
+                condition: service_started
+
+    api-bff-checkout:
+        image: willianbrito00/nerdstore-api-bff-checkout:${TAG}
+        container_name: nerdstore-api-bff-checkout
+        build:
+            context: ../../src
+            dockerfile: ./api-gateways/Checkout/NSE.Bff.Checkout/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+        depends_on:
+            api-identity:
+                condition: service_started
+            api-cart:
+                condition: service_started
+            api-payment:
+                condition: service_started
+            api-order:
+                condition: service_started
+
+    web-mvc:
+        image: willianbrito00/nerdstore-web-mvc-ecommerce:${TAG}
+        container_name: nerdstore-web-mvc-ecommerce
+        build:
+            context: ../../src
+            dockerfile: ./web/MVC/NSE.WebApp.MVC/Dockerfile        
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            LC_ALL: "en_US.UTF-8"
+            LANG: "en_US.UTF-8"
+            # Change the two lines above to your culture (ex pt_BR)
+            USE_HTTPS_REDIRECTION: "false"
+        expose:
+            - 80
+            - 443
+        volumes:
+            - ./certs:/https:ro
+            - dpkeys:/var/data_protection_keys/
+        depends_on:
+            api-catalog:
+                condition: service_started
+            api-identity:
+                condition: service_started
+            api-customers:
+                condition: service_started
+            api-bff-checkout:
+                condition: service_started
+
+    web-status:
+        image: willianbrito00/nerdstore-web-status:${TAG}
+        container_name: nerdstore-web-status
+        build:
+            context: ../../src
+            dockerfile: ./web/Status/NSE.WebApp.Status/Dockerfile
+        restart: always
+        environment:
+            <<: *common-variables
+            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+        volumes:
+            - ./certs:/https:ro
+            - ./certs/nerdstore.crt:/usr/local/share/ca-certificates/nerdstore.crt
+        depends_on:
+            api-identity:
+                condition: service_started
+
+volumes:
+    dpkeys:
+    nginx-certs:
