@@ -20,7 +20,6 @@
     <ProjectReference Include="..\..\..\building-blocks\NSE.Core\NSE.Core.csproj"/>
     <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj"/>
-    <ProjectReference Include="..\..\Payment\NSE.Payment.API\NSE.Payment.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

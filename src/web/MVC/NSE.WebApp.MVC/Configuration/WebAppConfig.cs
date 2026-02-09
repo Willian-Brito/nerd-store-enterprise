@@ -12,10 +12,10 @@ public static class WebAppConfig
     {
         services.AddControllersWithViews();
 
-        services
-            .AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo(@"/var/data_protection_keys/"))
-            .SetApplicationName("NerdStoreEnterprise");
+        // services
+        //     .AddDataProtection()
+        //     .PersistKeysToFileSystem(new DirectoryInfo(@"/var/data_protection_keys/"))
+        //     .SetApplicationName("NerdStoreEnterprise");
 
         services.Configure<ForwardedHeadersOptions>(options =>
         {

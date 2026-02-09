@@ -24,7 +24,7 @@
   <ItemGroup Label="HealthCheck">
     <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="9.0.0"/>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0"/>
-    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="9.0.0"/>
+    <!-- <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="9.0.0"/> -->
     <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="9.0.0"/>
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0"/>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0"/>

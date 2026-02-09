@@ -1,6 +1,5 @@
 using NSE.Queue.RabbitMQ.Configuration;
 using NSE.ShoppingCart.API.Jobs;
-using NSE.WebAPI.Core.Extensions;
 
 namespace NSE.ShoppingCart.API.Configuration;
 
@@ -14,7 +13,5 @@ public static class QueueConfig
         var connectionString = configuration.GetMessageQueueConnection("MessageBus");
         services.AddQueueRabbitMq(connectionString)
             .AddHostedService<ShoppingCartIntegrationJob>();
-        
-        // services.AddHealthChecks().AddQueueHealthCheck(connectionString);
     }
 }

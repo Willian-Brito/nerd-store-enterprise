@@ -3,7 +3,8 @@ name: nerdstore
 services:
     
     sql-server:
-        image: mcr.microsoft.com/mssql/server:2022-latest
+        # image: mcr.microsoft.com/mssql/server:2022-latest
+        image: mcr.microsoft.com/mssql/server:2019-latest
         container_name: nerdstore-mssql
         ports:
             - "1433:1433"
@@ -39,7 +40,8 @@ services:
             start_period: 5s       
     
     rabbitmq:
-        image: rabbitmq:4.1
+        # image: rabbitmq:4.1
+        image: rabbitmq:management
         container_name: nerdstore-rabbit
         hostname: rabbitmq
         ports:
@@ -58,21 +60,6 @@ services:
             retries: 10
             start_period: 5s
     
-    logging:
-        image: datalust/seq:2025.1
-        container_name: nerdstore-seq
-        ports:
-            - 5341:80
-        environment:
-            ACCEPT_EULA: "Y"
-            SEQ_FIRSTRUN_ADMINPASSWORD: "MyAdminPassword"
-        healthcheck:
-            test: "/seqsvr/Client/seqcli node health -s http://localhost"
-            interval: 3s
-            timeout: 5s
-            retries: 10
-            start_period: 5s    
-    
     generate-pfx:
         image: emberstack/openssl:latest # last update October 2019
         container_name: generate-pfx
@@ -86,9 +73,10 @@ services:
                    openssl req -sha256 -new -key nerdstore.rsa -out nerdstore.csr -subj '/CN=localhost' &&
                    openssl x509 -req -sha256 -days 365 -in nerdstore.csr -signkey nerdstore.rsa -out nerdstore.crt &&
                    openssl pkcs12 -export -out /https/nerdstore.io-localhost.pfx -inkey nerdstore.rsa -in nerdstore.crt -password pass:9HoGMnb7Lu8NFdHBz4Vq2rtKivzMhmMXhtvuB4TZcLMmbWfFmDQCjJeLURAJ4GYe &&
+                   chmod 644 /https/nerdstore.io-localhost.pfx &&
                    # Copy CRT and KEY files to the nginx-certs volume
                    cp nerdstore.crt /nginx-certs/ &&
-                   cp nerdstore.rsa /nginx-certs/nerdstore.key)"           
+                   cp nerdstore.rsa /nginx-certs/nerdstore.key)" 
 
     nerdstore-server:        
         image: nginx:1.29

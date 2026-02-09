@@ -1,163 +1,270 @@
+# 🛍️ Nerd Store Enterprise
+
+<div align="center">
+   <img src="docs/img/logo-nerdstore-transparent.png" />
+</div>
+
+
+## 💻 Sobre o projeto
+Este projeto consiste em uma aplicação de **e-commerce** desenvolvida com foco em boas práticas de **arquitetura de software**, separação de responsabilidades e construção de sistemas distribuídos.
+
+Sua implementação foi baseada em diversos outros repositórios que criei voltados para **arquitetura enterprise**, com o objetivo principal de consolidar aprendizados, explorar padrões arquiteturais e demonstrar, de forma prática, como esses conceitos podem ser aplicados em um fluxo completo de compra dentro de um e-commerce.
+
+### 🛢 Repositórios baseados
+- [Fundamentos de Microsserviços](https://github.com/Willian-Brito/microservices-learning)
+- [Dominando Kubertnetes](https://github.com/Willian-Brito/k8s-learning)
+- [GitHub Actions](https://github.com/Willian-Brito/github-actions-learning)
+- [Modelagem de Domínios Ricos](https://github.com/Willian-Brito/nerd-store)
+- [Dominando Testes de Software](https://github.com/Willian-Brito/dominando-testes-de-software)
+
+## 🎯 Arquitetura Geral
+
 <p align="center">
-    <img alt="logo" src="https://user-images.githubusercontent.com/5068797/161198565-ac18c5ac-c0d9-4669-9568-b2009e944d77.png#gh-light-mode-only" />
-    <img alt="logo" src="https://user-images.githubusercontent.com/5068797/161364257-0c1d81f6-62ac-4192-93f8-836b4ce0fd06.png#gh-dark-mode-only" />
+    <img src="docs/img/visao-de-arquitetura-microsservico.png" />
 </p>
 
-# DevStore | A microservices e-commerce reference application built with ASP.NET 9
+## 🧩 Microsserviços do E-commerce
 
-A real-world reference application powered
-by [desenvolvedor.io](https://desenvolvedor.io/) <img alt="Brasil" src="https://user-images.githubusercontent.com/5068797/161345649-c7184fdc-2bc3-42a9-8fb6-6ffee9c8f9c2.png" width="20" height="14" />
-implementing the most common and used technologies to share with the technical community the best way to develop full
-and complex applications with .NET
+Este projeto foi estruturado utilizando uma arquitetura baseada em microsserviços, contruídos em .NET 9, onde cada serviço é responsável por um conjunto específico de funcionalidades do domínio de negócio. 
+
+<p align="center">
+    <img src="docs/img/arquitetura-nerd-store.png" />
+</p>
+
+### 🔐 Identidade
+
+Responsável pela autenticação e autorização dos usuários do sistema.
+
+#### 🔷 Funcionalidades
+- **Criação de novo usuário**
+  - Permite o cadastro de novos usuários na plataforma.
+  - Valida dados de entrada e regras de segurança.
+  - Segurança no armazenamento de credenciais 
+- **Login**
+  - Autentica o usuário com base em suas credenciais.
+- **Logout**
+  - Encerra a sessão do usuário autenticado.
+- **Geração de JWT**
+  - Emite tokens de acesso para autenticação nas demais APIs.
+  - Gerencia expiração do token (1 hora)
+- **Refresh Token**
+  - Permite renovar o token de acesso sem necessidade de novo login.
+- **Validação de Token**
+  - Garante que apenas requisições autenticadas acessem recursos protegidos.
+- **Exposição de chaves públicas (JWKS)**
+  - Disponibiliza as chaves públicas para que outros microsserviços possam validar os JWTs emitidos.
+  - Permite validação distribuída e segura dos tokens.
+  - Rotação de chaves públicas (90 dias)
+
+### 👤 Customer
+
+Responsável pelo gerenciamento dos dados do cliente.
+
+#### 🔷 Funcionalidades
+- **Criar cliente**
+  - Realiza o cadastro de novos clientes na plataforma.
+- **Adicionar endereço de entrega**
+  - Permite que o cliente registre um ou mais endereços para envio de pedidos.
+
+### 🛍️ Catálogo
+
+Responsável pela gestão e consulta dos produtos disponíveis para venda.
+
+#### Funcionalidades
+- **Listar produtos**
+  - Exibe os produtos disponíveis no catálogo.
+- **Pesquisa de produtos paginados**
+  - Permite busca eficiente com paginação.
+- **Validações de estoque**
+  - Verifica disponibilidade dos produtos antes da compra.
+
+### 🧺 Carrinho
+
+Responsável pelo gerenciamento do carrinho de compras do usuário.
+
+#### 🔷 Funcionalidades
+- **CRUD de carrinho**
+  - Criação, leitura, atualização e remoção de itens.
+- **Aplicar cupom de desconto**
+  - Permite aplicar regras promocionais ao carrinho.
+- **Recalcular valores**
+  - Atualiza automaticamente o total com base nos itens e descontos.
+- **Validações do carrinho**
+  - Garante consistência dos dados (quantidade, disponibilidade, valores).
+
+### 📦 Pedido
+
+Responsável pelo processamento, cancelamento e registro dos pedidos realizados.
+
+#### 🔷 Funcionalidades
+- **Processar pedidos**
+  - Converte o carrinho em pedido.
+  - Orquestra comunicação com pagamento e demais serviços necessários.
+  - Garante persistência e rastreabilidade do fluxo de compra.
+
+### 💳 Pagamento
+
+Responsável pelo processamento financeiro dos pedidos.
+
+#### 🔷 Funcionalidades
+- **Simulação de processamento de pagamentos**
+  - Executa fluxo de autorização e confirmação de pagamento.
+  - Retorna status da transação (aprovado, recusado, pendente).
+  - Permite integração futura com gateways reais.
+
+### 🧭 BFF de Compras (Backend for Frontend)
+
+Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, centralizando regras e validações entre os serviços de **Carrinho**, **Pedido** e **Pagamento** para atender às necessidades do frontend.
+
+### Responsabilidades
+- Orquestrar chamadas entre:
+  - Microsserviço de **Carrinho**
+  - Microsserviço de **Pedido**
+  - Microsserviço de **Pagamento**
+- Reduzir a complexidade do frontend ao expor endpoints agregados.
+- Consolidar dados necessários para a jornada de compra.
+- Melhorar a experiência do cliente reduzindo múltiplas chamadas do frontend.
+
+### 🔷 Funcionalidades
+- **Iniciar checkout**
+  - Valida estado atual do carrinho.
+  - Garante consistência de valores e itens.
+- **Validar dados do pedido**
+  - Verifica endereço de entrega, disponibilidade e regras de negócio.
+- **Finalizar compra**
+  - Dispara o processamento do pedido.
+  - Coordena o fluxo até o envio para pagamento.
+- **Agregação de respostas**
+  - Retorna ao frontend um modelo consolidado com informações de carrinho, totais e status do pedido.
+
+## 🛠️ Tecnologias Utilizadas
+- **Backend: Linguagens e Frameworks**
+  - C#
+  - .NET
+
+- **Banco de Dados**
+  - PostgreSQL
+  - SQL Server
+
+- **ORM e Data Access**
+  - Entity Framework
+  - Dapper
+
+- **Testes Automatizados**
+  - xUnit
+  - Moq
+  - Fluent Assertions
+
+- **Comunicação de serviços**
+  - HTTP
+  - REST
+  - gRPC
+  - Eventos de filas
+
+- **Mensagerias**
+  - Background Services
+  - RabbitMQ
+  - EasyNetQ
+  - Kafka
+
+- **Frontend: Linguagens e Frameworks**
+  - AspNet MVC
+  - Razor
+  - Html
+  - Css
+  - Javascript  
+  - Bootstrap 5
+
+- **Hosting (Containers)**
+  - Docker (with composing)
+  - Kubernetes (k8s)
+  - NGINX  
+
+- **Logs e Monitoramento**
+  - Prometheus
+  - Grafana
+
+## 📦 Padrões de Design Implementados
+- [x] SOLID
+- [x] APIs REST
+- [x] Clean Code
+- [x] Clean Architecture
+- [x] DDD - Domain Driven Design (Layers and Domain Model Pattern)
+- [x] CQRS (Immediate Consistency)
+- [x] Repository Pattern
+- [x] Unit of Work
+- [x] Auditoria de Dados
+- [x] Global Error Handler
+- [x] Background services para processamento de filas
+- [x] Paginação de APIs
+- [x] Specification Pattern
+- [x] Result Pattern
+- [x] Retry Pattern
+- [x] Circuit Breaker
+- [x] API Gateway / BFF
+- [x] Testes Unitários
+- [ ] Testes de Integração
+- [ ] Testes e2e
+- [ ] Rate Limiting
+- [x] Conteinerização
+- [ ] CI/CD Pipelines
+  - [ ] Versionamento
+  - [ ] Build
+  - [ ] Testes Unitários
+  - [ ] Gerar Docker Image
+  - [ ] Subir Imagem no Docker Hub
+- [ ] Security Pipeline (DevSecOps) 
+  - [ ] SAST - Static Application Security Testing
+  - [ ] SCA - Software Composition Analysis
+  - [ ] IaC - Infra as Code
+  - [ ] Security Container Scan
+  - [ ] DAST - Dynamic Application Security Testing
+  - [ ] Integração com DefectDojo
+- [ ] Logs e Monitoramento
+
+## 📁 Estrutura de Pastas
+
+<p align="center">
+    <img src="docs/img/estrutura-de-pastas.png" />
+</p>
 
 ---
 
-###### This project was inspired by [EShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers). However, the real motivation was to build it by "our way."
+## 🚀 Como executar o projeto
 
-###### The EShopOnContainers is an awesome project. However, the code has some "bad smells." We found it difficult to start learning/using EShopOnContainers compared to DevStore. We like to think of the DevStore as a simplified (but no less complex) version and written with more care in code and small details. We also focused only on the Web architecture with ASP.NET.
+Você pode executar o projeto **NerdStore** em qualquer sistema operacional.  
+**Certifique-se de que o Docker está instalado em seu ambiente.**  
+([Instalar o Docker](https://docs.docker.com/get-docker/))
 
-## Give a Star! :star:
+Clone o repositório do `nerd-store-enterprise` e navegue até a pasta **infra/docker**. Em seguida:
 
-If you liked the project or if DevStore is helping you, please give us a star ;)
+### ▶️ Se você apenas quiser executar a aplicação DevStore no seu ambiente Docker:
 
-<p align="center">
-    <img alt="DevStore" src="https://user-images.githubusercontent.com/5068797/164293734-a72fbeeb-0965-4413-a624-29e1c56c25df.png" />
-</p>
-
-## Want to learn everything to build an app like this? :mortar_board:
-
-Check these online courses at [desenvolvedor.io](https://desenvolvedor.io) (only in Portuguese)
-
-- [ASP.NET Core Expert](https://desenvolvedor.io/formacao/asp-net-core-expert)
-- [Software Architect](https://desenvolvedor.io/formacao/arquiteto-de-software)
-
-## Technologies / Components implemented
-
-- .NET 9
-    - ASP.NET MVC Core
-    - ASP.NET WebApi
-    - ASP.NET Minimal API
-    - ASP.NET Identity Core
-    - Refresh Token
-    - JWT with rotating public/private keys
-    - gRPC
-    - Background Services
-    - Entity Framework Core
-
-- Components / Services
-    - RabbitMQ
-    - EasyNetQ    
-    - Polly
-    - Bogus 
-    - FluentValidator
-    - MediatR
-    - Swagger UI with JWT support
-
-- Hosting
-    - IIS
-    - NGINX
-    - Docker (with composing)
-
-## Architecture:
-
-### Complete architecture implementing the most important and used concerns as:
-
-- Hexagonal Architecture
-- Clean Code
-- Clean Architecture
-- DDD - Domain Driven Design (Layers and Domain Model Pattern)
-- Domain Events
-- Domain Notification
-- Domain Validations
-- CQRS (Immediate Consistency)
-- Retry Pattern
-- Circuit Breaker
-- Unit of Work
-- Repository
-- Specification Pattern
-- API Gateway / BFF
-
----
-
-## Architecture Overview
-
-### The entire application is based on a unique solution with 7 APIs and one web application (MVC)
-
-<p align="center">
-    <img alt="read before" src="https://user-images.githubusercontent.com/5068797/161202409-edcf2f38-0714-4de5-927d-1a02be4501ec.png" />
-</p>
-
----
-
-This is a reference application, each microservice has its own database and represents a bounded context (DDD concept).
-There is a BFF / API Gateway to manage the Basket / Order / Payment requests and data structure from responses.
-
-<p align="center">
-    <img alt="read before" src="https://user-images.githubusercontent.com/5068797/161207732-e4f67ce4-624d-4067-a756-67ee1bb553de.png" />
-</p>
-
----
-
-## Getting Started
-
-You can run the DevStore project on any operating system. **Make sure you have installed docker in your environment.
-** ([Get Docker Installation](https://docs.docker.com/get-docker/))
-
-Clone the DevStore's repository and navigate to the **/Docker** folder and then:
-
-### If you just want to run the DevStore application in your Docker environment:
-
-```
+```bash
 docker-compose up
 ```
 
-### If you want to build the local images and run the DevStore application in your Docker environment:
+### 🏗️ Se você quiser gerar as imagens locais e executar a aplicação DevStore no seu ambiente Docker:
 
-This docker compose will provide one database container per each API service.
+Este docker-compose irá fornecer **um container de banco de dados para cada serviço de API.**
 
-```
+```bash
 docker-compose -f docker-compose-local.yml up --build
 ```
 
-### If you prefer to save resource, then use the light local docker compose:
+### 💡 Se preferir economizar recursos, utilize o docker-compose local simplificado:
 
-This docker compose will provide just one database container for all API services.
+Este `docke-compose` irá fornecer **apenas um container de banco de dados para todos os serviços de API.**
 
-```
+```bash
 docker-compose -f docker-compose-local-light.yml up --build
 ```
 
----
+### ⚙️ Configurações para VS Code:
 
-### If you want to run locally with Visual Studio / VSCode:
+- Abra o VSCode no diretório raiz (onde está o arquivo da solução).
+- Crie um novo `launch.json` na seção de debug do VSCode e utilize a configuração abaixo para habilitar a opção **"Start all projects"**.
 
-You will need:
-
-- Docker
-- MS-SQL Server instance (or container)
-- RabbitMQ
-
-```bash
-docker run -d --hostname rabbit-host --name rabbit-nerdstore -p 15672:15672 -p 5672:5672 rabbitmq:management
-```
-
-So you can edit the Docker compose to just run the database and queue dependencies and save your time.
-
-### If you want Visual Studio with F5 and debug experience:
-
-- You will need at least Visual Studio 2022 and .NET 6.
-- The latest SDK and tools can be downloaded from https://dot.net/core
-- Set up the solution to start multiple projects and hit F5
-
-![image](https://user-images.githubusercontent.com/5068797/161358024-bd5754b6-61e3-47f2-bd17-bd3c32ec4bdd.png)
-
----
-
-### If you want Visual Studio Code experience:
-
-- Open the VSCode on the root directory (solution file)
-- Create a new launch.json at VSCode debug section and use the configuration below to set up the option "Start all
-  projects"
 
 ```json
 {
@@ -271,24 +378,53 @@ So you can edit the Docker compose to just run the database and queue dependenci
 }    
 ```
 
-## Disclaimer
+## ⚠️ Aviso importante
 
-- This is not an architectural template or bootstrap model for new apps
-- All implementations were made for the real world, but the goal is to share knowledge
-- In case it is too many implementations included, remove the excess and try to avoid **over-engineering**
+- Este não é um template arquitetural nem um modelo base para novas aplicações.
+- Todas as implementações foram feitas pensando em cenários do mundo real, porém o objetivo principal é compartilhar conhecimento.
+- Caso existam implementações em excesso, remova o que for desnecessário e procure evitar **over-engineering**.
 
-## Pull-Requests
+## 🛒 Nerd Store E-commerce
 
-Open an issue and let's discuss! Do not submit PRs for undiscussed or unapproved features.
+#### 🖥️ Catálogo de Produtos
+<div align="center">
+  <img src="docs/img/telas/catalogo.png" />
+</div>
 
-If you want to help us, choose an approved issue and implement it.
+#### 🖥️ Detalhes de Produtos
+<div align="center">
+  <img src="docs/img/telas/detalhes-do-produto.png" />
+</div>
 
-## We are Online
 
-See the project running on <a href="https://devstore.academy" target="_blank">DevStore official instance</a>
+#### 🖥️ Carrinho de Compras
+<div align="center">
+  <img src="docs/img/telas/carrinho.png" />
+</div>
 
-## About
+#### 🖥️ Adicionar Endereço de Entrega
+<div align="center">
+  <img src="docs/img/telas/adicionar-endereco.png" />
+</div>
 
-DevStore was proudly developed by [desenvolvedor.io](https://desenvolvedor.io/)
-❤<img alt="Brasil" src="https://user-images.githubusercontent.com/5068797/161345649-c7184fdc-2bc3-42a9-8fb6-6ffee9c8f9c2.png" width="20" height="14" />
-team under the [MIT license](LICENSE).
+#### 🖥️ Adicionar Dados do Pagamento
+<div align="center">
+  <img src="docs/img/telas/adicionar-pagamento.png" />
+</div>
+
+#### 🖥️ Pagamento Aprovado
+<div align="center">
+  <img src="docs/img/telas/pagamento-processado.png" />
+</div>
+
+#### 🖥️ Meus Pedidos
+<div align="center">
+  <img src="docs/img/telas/meus-pedidos.png" />
+</div>
+
+
+## 📝 Licença
+
+Este projeto esta sobe a licença [MIT](https://github.com/Willian-Brito/nerd-store-enterprise/blob/main/LICENSE).
+
+Feito com ❤️ por Willian Brito 👋🏽 [Entre em contato!](https://www.linkedin.com/in/willian-ferreira-brito/)
