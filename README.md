@@ -17,13 +17,13 @@ Sua implementação foi baseada em diversos outros repositórios que criei volta
 - [Modelagem de Domínios Ricos](https://github.com/Willian-Brito/nerd-store)
 - [Dominando Testes de Software](https://github.com/Willian-Brito/dominando-testes-de-software)
 
-## 🎯 Arquitetura Geral
+## 🎯 Arquitetura de Solução
 
 <p align="center">
     <img src="docs/img/visao-de-arquitetura-microsservico.png" />
 </p>
 
-## 🧩 Microsserviços do E-commerce
+## 🧩 Microsserviços
 
 Este projeto foi estruturado utilizando uma arquitetura baseada em microsserviços, contruídos em .NET 9, onde cada serviço é responsável por um conjunto específico de funcionalidades do domínio de negócio. 
 
@@ -56,7 +56,7 @@ Responsável pela autenticação e autorização dos usuários do sistema.
   - Permite validação distribuída e segura dos tokens.
   - Rotação de chaves públicas (90 dias)
 
-### 👤 Customer
+### 👤 Clientes
 
 Responsável pelo gerenciamento dos dados do cliente.
 
@@ -64,7 +64,7 @@ Responsável pelo gerenciamento dos dados do cliente.
 - **Criar cliente**
   - Realiza o cadastro de novos clientes na plataforma.
 - **Adicionar endereço de entrega**
-  - Permite que o cliente registre um ou mais endereços para envio de pedidos.
+  - Permite que o cliente registre endereços para envio de pedidos.
 
 ### 🛍️ Catálogo
 
@@ -77,6 +77,11 @@ Responsável pela gestão e consulta dos produtos disponíveis para venda.
   - Permite busca eficiente com paginação.
 - **Validações de estoque**
   - Verifica disponibilidade dos produtos antes da compra.
+- **Baixa de estoque**
+  - Reduz a quantidade disponível após confirmação de um pedido.
+  - Garante consistência com o processo de venda.
+- **Estorno de estoque**
+  - Devolve itens ao estoque em casos de cancelamento ou falha no processamento do pedido.
 
 ### 🧺 Carrinho
 
@@ -101,6 +106,11 @@ Responsável pelo processamento, cancelamento e registro dos pedidos realizados.
   - Converte o carrinho em pedido.
   - Orquestra comunicação com pagamento e demais serviços necessários.
   - Garante persistência e rastreabilidade do fluxo de compra.
+- **Cancelamento de pedido**
+  - Permite cancelar pedidos conforme regras de negócio.
+  - Dispara processos relacionados, como:
+    - Estorno de pagamento
+    - Devolução de itens ao estoque
 
 ### 💳 Pagamento
 
@@ -111,7 +121,11 @@ Responsável pelo processamento financeiro dos pedidos.
   - Executa fluxo de autorização e confirmação de pagamento.
   - Retorna status da transação (aprovado, recusado, pendente).
   - Permite integração futura com gateways reais.
-
+- **Estorno de pagamento**
+  - Realiza devolução de valores em casos de cancelamento ou falha posterior.
+  - Mantém registro das transações financeiras.
+  - Garante rastreabilidade e consistência do fluxo financeiro.
+  
 ### 🧭 BFF de Compras (Backend for Frontend)
 
 Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, centralizando regras e validações entre os serviços de **Carrinho**, **Pedido** e **Pagamento** para atender às necessidades do frontend.
@@ -202,7 +216,7 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 - [x] Retry Pattern
 - [x] Circuit Breaker
 - [x] API Gateway / BFF
-- [x] Testes Unitários
+- [ ] Testes Unitários
 - [ ] Testes de Integração
 - [ ] Testes e2e
 - [ ] Rate Limiting
@@ -238,13 +252,13 @@ Você pode executar o projeto **NerdStore** em qualquer sistema operacional.
 
 Clone o repositório do `nerd-store-enterprise` e navegue até a pasta **infra/docker**. Em seguida:
 
-### ▶️ Se você apenas quiser executar a aplicação DevStore no seu ambiente Docker:
+### ▶️ Se você apenas quiser executar a aplicação NerdStore no seu ambiente Docker:
 
 ```bash
 docker-compose up
 ```
 
-### 🏗️ Se você quiser gerar as imagens locais e executar a aplicação DevStore no seu ambiente Docker:
+### 🏗️ Se você quiser gerar as imagens locais e executar a aplicação NerdStore no seu ambiente Docker:
 
 Este docker-compose irá fornecer **um container de banco de dados para cada serviço de API.**
 
