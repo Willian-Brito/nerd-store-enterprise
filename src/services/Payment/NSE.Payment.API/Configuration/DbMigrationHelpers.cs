@@ -7,8 +7,8 @@ public static class DbMigrationHelpers
 {
     /// <summary>
     ///     Generate migrations before running this method, you can use command bellow:
-    ///     Nuget package manager: Add-Migration DbInit -context BillingContext
-    ///     Dotnet CLI: dotnet ef migrations add DbInit -c BillingContext
+    ///     Nuget package manager: Add-Migration DbInit -context PaymentContext
+    ///     Dotnet CLI: dotnet ef migrations add DbInit -c PaymentContext
     /// </summary>
     public static async Task EnsureSeedData(WebApplication serviceScope)
     {

@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NSE.Core\NSE.Core.csproj" />
+    <ProjectReference Include="..\NSE.Queue\NSE.Queue.csproj" />
     <ProjectReference Include="..\NSE.Security\NSE.Security.csproj" />
   </ItemGroup>
 

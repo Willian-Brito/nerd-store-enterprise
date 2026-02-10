@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NSE.Core.Utilities;
+using NSE.Queue.RabbitMQ.Configuration;
 using NSE.WebAPI.Core.DatabaseFlavor;
 
 namespace NSE.WebAPI.Core.Configuration;
@@ -18,6 +20,11 @@ public static class GenericHealthCheck
         var checkBuilder = services
             .AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), new[] { "api" });
+
+        var queueConnStr = configuration.GetMessageQueueConnection("MessageBus");
+
+        if(queueConnStr.IsPresent())
+            checkBuilder.AddRabbitMqHealthCheck(queueConnStr);
 
         var (database, connString) = DatabaseProviderDetector.Detect(configuration);
         return database switch

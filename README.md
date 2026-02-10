@@ -118,7 +118,7 @@ Responsável pelo processamento financeiro dos pedidos.
 
 #### 🔷 Funcionalidades
 - **Simulação de processamento de pagamentos**
-  - Executa fluxo de autorização e confirmação de pagamento.
+  - Executa fluxo de autorização e captura de pagamento.
   - Retorna status da transação (aprovado, recusado, pendente).
   - Permite integração futura com gateways reais.
 - **Estorno de pagamento**
@@ -215,6 +215,7 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 - [x] Result Pattern
 - [x] Retry Pattern
 - [x] Circuit Breaker
+- [x] Health Checks
 - [x] API Gateway / BFF
 - [ ] Event Sourcing
 - [ ] Testes Unitários

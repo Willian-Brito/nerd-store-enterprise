@@ -3,6 +3,6 @@
     --secondaryColor: #F2F2F2;
     --bgMenuActive: #797FF2;
     --bgButton: #A2A6F2;
-    --logoImageUrl: url('/favicon.png');
+    --logoImageUrl: url('https://raw.githubusercontent.com/Willian-Brito/nerd-store-enterprise/refs/heads/main/src/web/Status/NSE.WebApp.Status/wwwroot/favicon.png');
     --bgAside: var(--primaryColor);
 }

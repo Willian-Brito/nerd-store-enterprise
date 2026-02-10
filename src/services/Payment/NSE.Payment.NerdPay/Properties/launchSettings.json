@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "DevStore.Billing.DevsPay": {
+    "NerdStore.Payment.DevsPay": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
