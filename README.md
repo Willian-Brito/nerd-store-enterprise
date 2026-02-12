@@ -398,7 +398,7 @@ docker-compose -f docker-compose-local-light.yml up --build
 - Todas as implementações foram feitas pensando em cenários do mundo real, porém o objetivo principal é compartilhar conhecimento.
 - Caso existam implementações em excesso, remova o que for desnecessário e procure evitar **over-engineering**.
 
-## 🛒 Nerd Store E-commerce
+## 🛒 Nerd Store: E-commerce
 
 #### 🖥️ Catálogo de Produtos
 <div align="center">
@@ -409,7 +409,6 @@ docker-compose -f docker-compose-local-light.yml up --build
 <div align="center">
   <img src="docs/img/telas/detalhes-do-produto.png" />
 </div>
-
 
 #### 🖥️ Carrinho de Compras
 <div align="center">
@@ -436,6 +435,22 @@ docker-compose -f docker-compose-local-light.yml up --build
   <img src="docs/img/telas/meus-pedidos.png" />
 </div>
 
+## ❤️‍🩹 Nerd Store: Status
+
+#### 🖥️ Monitoramento dos Microsserviços
+<div align="center">
+  <img src="docs/img/telas/status.png" />
+</div>
+
+#### 🖥️ Depêndencias de Identity API
+<div align="center">
+  <img src="docs/img/telas/status-identity-selected.png" />
+</div>
+
+#### 🖥️ Depêndencias do BFF
+<div align="center">
+  <img src="docs/img/telas/status-checkout-selected.png" />
+</div>
 
 ## 📝 Licença
 
