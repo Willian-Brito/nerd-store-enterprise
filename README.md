@@ -296,6 +296,17 @@ docker-compose -f docker-compose-local-light.yml up --build
             "stopAtEntry": false
         },
         {
+            "name": "Status WebApp",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/web/Status/NSE.WebApp.Status/bin/Debug/net9.0/NSE.WebApp.Status.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/web/Status/NSE.WebApp.Status",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
             "name": "Payment API",
             "type": "coreclr",
             "request": "launch",
@@ -378,6 +389,7 @@ docker-compose -f docker-compose-local-light.yml up --build
             "name": "Start all projects",
             "configurations": [
                 "MVC WebApp",
+                "Status WebApp",
                 "Payment API",
                 "Catalog API",
                 "Customer API",
