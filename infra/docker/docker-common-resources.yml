@@ -1,46 +1,8 @@
 name: nerdstore
 
 services:
-    
-    sql-server:
-        # image: mcr.microsoft.com/mssql/server:2022-latest
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        container_name: nerdstore-mssql
-        ports:
-            - "1433:1433"
-        expose:
-            - 1433
-        environment:
-            SA_PASSWORD: "MyDB@123"
-            ACCEPT_EULA: "Y"
-        healthcheck:
-            test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P MyDB@123 -Q 'SELECT 1'" ]
-            interval: 3s
-            timeout: 5s
-            retries: 10
-            start_period: 5s     
-
-    postgres:
-        image: postgres:16
-        container_name: nerdstore-postgres
-        ports:
-            - "5432:5432"
-        expose:
-            - 5432
-        environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: MyDB@123           
-        volumes:
-            - postgres-data:/var/lib/postgresql/data
-        healthcheck:                                                                    
-            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-            interval: 3s
-            timeout: 5s
-            retries: 10
-            start_period: 5s       
-    
+      
     rabbitmq:
-        # image: rabbitmq:4.1
         image: rabbitmq:management
         container_name: nerdstore-rabbit
         hostname: rabbitmq
@@ -61,7 +23,7 @@ services:
             start_period: 5s
     
     generate-pfx:
-        image: emberstack/openssl:latest # last update October 2019
+        image: emberstack/openssl:latest
         container_name: generate-pfx
         volumes:
             - ./certs:/https:rw
@@ -97,4 +59,3 @@ services:
 volumes:
     dpkeys:
     nginx-certs:
-    postgres-data:

@@ -274,6 +274,14 @@ Este `docke-compose` irá fornecer **apenas um container de banco de dados para 
 docker-compose -f docker-compose-local-light.yml up --build
 ```
 
+#### 🌐 E-commerce
+- https://localhost:7501
+
+#### 🌐 Status
+- http://localhost:7510
+- https://localhost:7511
+
+
 ### ⚙️ Configurações para VS Code:
 
 - Abra o VSCode no diretório raiz (onde está o arquivo da solução).

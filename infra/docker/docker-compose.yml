@@ -6,31 +6,58 @@ x-common-variables: &common-variables
     ASPNETCORE_Kestrel__Certificates__Default__Password: 9HoGMnb7Lu8NFdHBz4Vq2rtKivzMhmMXhtvuB4TZcLMmbWfFmDQCjJeLURAJ4GYe
     ASPNETCORE_Kestrel__Certificates__Default__Path: /https/nerdstore.io-localhost.pfx
     AppSettings__DatabaseType: Postgre
-    MessageQueueConnection__MessageBus: host=rabbitmq:5672;publisherConfirms=true;timeout=30;username=nerdstore;password=nerdstore
 
 include:
     - docker-common-resources.yml
 
 services:
     
+    database-identity:
+        image: postgres:16
+        container_name: nerdstore-database-identity
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s  
+
     api-identity:
         image: willianbrito00/nerdstore-api-identity:${TAG}
-        container_name: nerdstore-api-identity  
+        container_name: nerdstore-api-identity      
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBUsers;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-identity;Database=DBUsers;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
         depends_on:
             generate-pfx:
                 condition: service_completed_successfully
-            postgres:
-                condition: service_started
-            logging:
+            database-identity:
                 condition: service_started
             rabbitmq:
-                condition: service_started
+                condition: service_healthy
+
+    database-cart:
+        image: postgres:16
+        container_name: nerdstore-database-cart
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s 
 
     api-cart:
         image: willianbrito00/nerdstore-api-cart:${TAG}
@@ -38,12 +65,31 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBShoppingCart;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-cart;Database=DBShoppingCart;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
         depends_on:
             api-identity:
                 condition: service_started
+            database-cart:
+                condition: service_started
+            rabbitmq:
+                condition: service_healthy
+
+    database-catalog:
+        image: postgres:16
+        container_name: nerdstore-database-catalog
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s 
 
     api-catalog:
         image: willianbrito00/nerdstore-api-catalog:${TAG}
@@ -51,12 +97,31 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBCatalog;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-catalog;Database=DBCatalog;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
         depends_on:
             api-identity:
                 condition: service_started
+            database-catalog:
+                condition: service_started
+            rabbitmq:
+                condition: service_healthy
+
+    database-customer:
+        image: postgres:16
+        container_name: nerdstore-database-customer
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s 
 
     api-customers:
         image: willianbrito00/nerdstore-api-customers:${TAG}
@@ -64,12 +129,33 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBCustomer;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-customer;Database=DBCustomer;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
         depends_on:
             api-identity:
                 condition: service_started
+            database-customer:
+                condition: service_started
+            rabbitmq:
+                condition: service_healthy
+
+    database-order:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        container_name: nerdstore-database-order
+        ports:
+            - "1433:1433"
+        expose:
+            - 1433
+        environment:
+            SA_PASSWORD: "MyDB@123"
+            ACCEPT_EULA: "Y"
+        healthcheck:
+            test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P MyDB@123 -Q 'SELECT 1'" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s
 
     api-order:
         image: willianbrito00/nerdstore-api-order:${TAG}
@@ -77,7 +163,7 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=sql-server,1433;Database=DBOrder;User Id=sa;Password=MyDB@123;TrustServerCertificate=True;"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-order,1433;Database=DBOrder;User Id=sa;Password=MyDB@123;TrustServerCertificate=True;"
             AppSettings__DatabaseType: SqlServer
             Logging__Console__FormatterName: ""
         volumes:
@@ -85,6 +171,25 @@ services:
         depends_on:
             api-identity:
                 condition: service_started
+            database-order:
+                condition: service_started
+            rabbitmq:
+                condition: service_healthy
+
+    database-payment:
+        image: postgres:16
+        container_name: nerdstore-database-payment
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s 
 
     api-payment:
         image: willianbrito00/nerdstore-api-payment:${TAG}
@@ -92,7 +197,7 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBPayment;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-payment;Database=DBPayment;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
         depends_on:
@@ -100,6 +205,25 @@ services:
                 condition: service_started
             api-order:
                 condition: service_started
+            database-payment:
+                condition: service_started
+            rabbitmq:
+                condition: service_healthy
+
+    database-status:
+        image: postgres:16
+        container_name: nerdstore-database-status
+        expose:
+            - 5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: MyDB@123
+        healthcheck:                                                                    
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 3s
+            timeout: 5s
+            retries: 10
+            start_period: 5s 
 
     api-bff-checkout:
         image: willianbrito00/nerdstore-api-bff-checkout:${TAG}
@@ -107,14 +231,20 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-status;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
         depends_on:
-            - api-identity
-            - api-cart
-            - api-payment
-            - api-order
+            api-identity:
+                condition: service_started
+            api-cart:
+                condition: service_started
+            api-payment:
+                condition: service_started
+            api-order:
+                condition: service_started
+            database-status:
+                condition: service_started
 
     web-mvc:
         image: willianbrito00/nerdstore-web-mvc-ecommerce:${TAG}
@@ -122,7 +252,7 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-status;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
             LC_ALL: "en_US.UTF-8"
             LANG: "en_US.UTF-8"
             # Change the two lines above to your culture (ex pt_BR)
@@ -134,10 +264,17 @@ services:
             - ./certs:/https:ro
             - dpkeys:/var/data_protection_keys/
         depends_on:
-            - api-catalog
-            - api-identity
-            - api-customers
-            - api-bff-checkout
+            api-catalog:
+                condition: service_started
+            api-identity:
+                condition: service_started
+            api-customers:
+                condition: service_started
+            api-bff-checkout:
+                condition: service_started
+            database-status:
+                condition: service_started
+
 
     web-status:
         image: willianbrito00/nerdstore-web-status:${TAG}
@@ -145,12 +282,15 @@ services:
         restart: always
         environment:
             <<: *common-variables
-            CUSTOMCONNSTR_DefaultConnection: "Server=postgres;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
+            CUSTOMCONNSTR_DefaultConnection: "Server=database-status;Database=DBStatus;Port=5432;User Id=postgres;Password=MyDB@123;CommandTimeout=500"
         volumes:
             - ./certs:/https:ro
             - ./certs/nerdstore.crt:/usr/local/share/ca-certificates/nerdstore.crt
         depends_on:
-            - web-mvc
+            api-identity:
+                condition: service_started
+            database-status:
+                condition: service_started
 
 volumes:
     dpkeys:

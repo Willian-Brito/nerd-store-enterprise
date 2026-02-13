@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="devstore.css">
+    <None Update="nerdstore.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
