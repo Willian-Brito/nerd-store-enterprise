@@ -131,39 +131,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Set TAG env for compose
-      #   run: echo "TAG=${TAG}" >> $GITHUB_ENV
-
-      - name: Listing (Debug)
-        run: ls -la
-
       - name: Build docker images
         working-directory: ./infra/docker
         run: |
           docker compose -f ./docker-compose-ci.yml build --parallel
 
-      # - name: Export images to TAR
-      #   run: |
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-identity:${{env.TAG}} -o api-identity.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-cart:${{env.TAG}} -o api-cart.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-catalog:${{env.TAG}} -o api-catalog.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-customers:${{env.TAG}} -o api-customers.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-order:${{env.TAG}} -o api-order.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-payment:${{env.TAG}} -o api-payment.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-bff-checkout:${{env.TAG}} -o api-bff-checkout.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-web-mvc-ecommerce:${{env.TAG}} -o web-mvc.tar
-      #     docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-web-status:${{env.TAG}} -o web-status.tar
-
-      - name: Export all compose images
+      - name: Export images to TAR
         run: |
-          docker images --format "{{.Repository}}:{{.Tag}}" | grep willianbrito00 > images.txt
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-identity:${{env.TAG}} -o api-identity.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-cart:${{env.TAG}} -o api-cart.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-catalog:${{env.TAG}} -o api-catalog.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-customers:${{env.TAG}} -o api-customers.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-order:${{env.TAG}} -o api-order.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-payment:${{env.TAG}} -o api-payment.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-bff-checkout:${{env.TAG}} -o api-bff-checkout.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-web-mvc-ecommerce:${{env.TAG}} -o web-mvc.tar
+          docker save ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-web-status:${{env.TAG}} -o web-status.tar
 
-          while read image; do
-            name=$(echo $image | tr '/:' '_')
-            docker save $image -o "$name.tar"
-          done < images.txt
-
-      - name: Debug - listar arquivos
+      - name: Listing (Debug)
         run: |
           pwd
           ls -la
@@ -174,4 +159,12 @@ jobs:
         with:
           name: docker-images-${{ env.TAG }}
           path: |
-            *.tar
+            api-identity.tar
+            api-cart.tar
+            api-catalog.tar
+            api-customers.tar
+            api-order.tar
+            api-payment.tar
+            api-bff-checkout.tar
+            web-mvc.tar
+            web-status.tar
