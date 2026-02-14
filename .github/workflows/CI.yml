@@ -287,7 +287,7 @@ jobs:
           path: .
 
       - name: List files
-        run: ls -la images
+        run: ls -la
 
       - name: Install Trivy
         run: |
