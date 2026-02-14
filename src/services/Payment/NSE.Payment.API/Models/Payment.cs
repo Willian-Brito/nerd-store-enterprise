@@ -1,8 +1,9 @@
 using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 
 namespace NSE.Payment.API.Models;
 
-public class Payment: Entity, IAggregateRoot
+public class Payment: AuditableEntity, IAggregateRoot
 {
     public Guid OrderId { get; set; }
     public PaymentType PaymentType { get; set; }

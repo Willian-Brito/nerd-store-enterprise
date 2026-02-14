@@ -8,7 +8,7 @@
 ## 💻 Sobre o projeto
 Este projeto consiste em uma aplicação de **e-commerce** desenvolvida com foco em boas práticas de **arquitetura de software**, separação de responsabilidades e construção de sistemas distribuídos.
 
-Sua implementação foi baseada em diversos outros repositórios que criei voltados para **arquitetura enterprise**, com o objetivo principal de consolidar aprendizados, explorar padrões arquiteturais e demonstrar, de forma prática, como esses conceitos podem ser aplicados em um fluxo completo de compra dentro de um e-commerce.
+Sua implementação foi baseada em diversos outros repositórios voltados para **arquitetura enterprise**, com o objetivo principal de consolidar aprendizados, explorar padrões arquiteturais e demonstrar, de forma prática, como esses conceitos podem ser aplicados em um fluxo completo de compra dentro de um e-commerce.
 
 ### ⛃ Repositórios baseados
 - [Fundamentos de Microsserviços](https://github.com/Willian-Brito/microservices-learning)

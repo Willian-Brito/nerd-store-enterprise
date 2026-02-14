@@ -1,8 +1,8 @@
-using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 
 namespace NSE.Payment.API.Models;
 
-public class Transaction : Entity
+public class Transaction : AuditableEntity
 {
     public string AuthorizationCode { get; set; }
     public string CreditCardCompany { get; set; }

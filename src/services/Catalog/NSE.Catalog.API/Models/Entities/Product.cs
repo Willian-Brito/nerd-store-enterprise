@@ -1,8 +1,9 @@
 using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 
 namespace NSE.Catalog.API.Models.Entities;
 
-public class Product : Entity, IAggregateRoot
+public class Product : AuditableEntity, IAggregateRoot
 {
     public string Name { get; set; }
     

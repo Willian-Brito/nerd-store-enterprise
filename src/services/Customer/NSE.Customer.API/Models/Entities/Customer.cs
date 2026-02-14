@@ -1,8 +1,9 @@
 using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 
 namespace NSE.Customer.API.Models.Entities;
 
-public class Customer : Entity, IAggregateRoot
+public class Customer : AuditableEntity, IAggregateRoot
 {
     public string Name { get; private set; }
     public Email Email { get; private set; }

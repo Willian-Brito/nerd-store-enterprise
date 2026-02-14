@@ -1,8 +1,8 @@
-using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 
 namespace NSE.Customer.API.Models.Entities;
 
-public class Address : Entity
+public class Address : AuditableEntity
 {
     public string StreetAddress { get; private set; }
     public string BuildingNumber { get; private set; }

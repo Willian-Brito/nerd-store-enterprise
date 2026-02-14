@@ -3,7 +3,7 @@ using NSE.Core.Messages.Base;
 
 namespace NSE.Core.DomainObjects;
 
-public abstract class Entity : AuditableEntity
+public abstract class Entity
 {
     private List<Event> _events;
     public Guid Id { get; set; }

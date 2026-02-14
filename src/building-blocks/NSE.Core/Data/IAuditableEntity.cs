@@ -1,3 +1,5 @@
+using NSE.Core.DomainObjects;
+
 namespace NSE.Core.Data;
 
 public interface IAuditableEntity
@@ -10,7 +12,7 @@ public interface IAuditableEntity
     Guid? DeletedBy { get; }
 }
 
-public abstract class AuditableEntity : IAuditableEntity
+public abstract class AuditableEntity : Entity, IAuditableEntity
 {
     public DateTime CreatedAt { get; private set; }
     public Guid? CreatedBy { get; private set; }

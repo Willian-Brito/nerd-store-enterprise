@@ -1,9 +1,10 @@
 using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 using NSE.Order.Domain.Entities.Vouchers;
 
 namespace NSE.Order.Domain.Entities.Orders;
 
-public class Order : Entity, IAggregateRoot
+public class Order : AuditableEntity, IAggregateRoot
 {
     public int Code { get; private set; }
     public Guid CustomerId { get; private set; }

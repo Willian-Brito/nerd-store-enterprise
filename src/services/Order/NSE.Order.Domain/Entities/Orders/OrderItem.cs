@@ -1,8 +1,8 @@
-using NSE.Core.DomainObjects;
+using NSE.Core.Data;
 
 namespace NSE.Order.Domain.Entities.Orders;
 
-public class OrderItem : Entity
+public class OrderItem : AuditableEntity
 {
     public Guid OrderId { get; private set; }
     public Guid ProductId { get; private set; }
