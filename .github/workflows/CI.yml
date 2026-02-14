@@ -163,17 +163,15 @@ jobs:
             docker save $image -o "$name.tar"
           done < images.txt
 
+      - name: Debug - listar arquivos
+        run: |
+          pwd
+          ls -la
+          find . -name "*.tar"
+
       - name: Upload docker images artifact
         uses: actions/upload-artifact@v4
         with:
           name: docker-images-${{ env.TAG }}
           path: |
-            api-identity.tar
-            api-cart.tar
-            api-catalog.tar
-            api-customers.tar
-            api-order.tar
-            api-payment.tar
-            api-bff-checkout.tar
-            web-mvc.tar
-            web-status.tar
+            *.tar
