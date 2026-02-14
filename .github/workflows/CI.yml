@@ -314,15 +314,15 @@ jobs:
         run: |
           mkdir trivy-reports
 
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-identity.txt willianbrito00/nerdstore-api-identity:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-cart.txt willianbrito00/nerdstore-api-cart:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-catalog.txt willianbrito00/nerdstore-api-catalog:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-customers.txt willianbrito00/nerdstore-api-customers:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-order.txt willianbrito00/nerdstore-api-order:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-payment.txt willianbrito00/nerdstore-api-payment:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-bff-checkout.txt willianbrito00/nerdstore-api-bff-checkout:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/web-mvc.txt willianbrito00/nerdstore-web-mvc-ecommerce:${{ env.TAG }}
-          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/web-status.txt willianbrito00/nerdstore-web-status:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-identity.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-identity:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-cart.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-cart:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-catalog.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-catalog:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-customers.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-customers:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-order.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-order:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-payment.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-payment:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-bff-checkout.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-api-bff-checkout:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/web-mvc.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-web-mvc-ecommerce:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/web-status.txt ${{vars.DOCKERHUB_REPOSITORY}}/nerdstore-web-status:${{ env.TAG }}
       
       - name: Upload Trivy Reports
         uses: actions/upload-artifact@v4
