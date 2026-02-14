@@ -1,5 +1,7 @@
 # 🛍️ Nerd Store Enterprise
 
+[![Continuous Integration](https://github.com/Willian-Brito/nerd-store-enterprise/actions/workflows/CI.yml/badge.svg)](https://github.com/Willian-Brito/nerd-store-enterprise/actions/workflows/ci.yml)
+
 <div align="center">
    <img src="docs/img/logo-nerdstore-transparent.png" />
 </div>
