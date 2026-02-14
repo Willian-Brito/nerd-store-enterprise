@@ -1,0 +1,57 @@
+name: nerdstore-ci
+
+services:
+
+  api-identity:
+    image: willianbrito00/nerdstore-api-identity:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./services/Identity/NSE.Identity.API/Dockerfile
+
+  api-cart:
+    image: willianbrito00/nerdstore-api-cart:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./services/ShoppingCart/NSE.ShoppingCart.API/Dockerfile
+
+  api-catalog:
+    image: willianbrito00/nerdstore-api-catalog:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./services/Catalog/NSE.Catalog.API/Dockerfile
+
+  api-customers:
+    image: willianbrito00/nerdstore-api-customers:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./services/Customer/NSE.Customer.API/Dockerfile
+
+  api-order:
+    image: willianbrito00/nerdstore-api-order:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./services/Order/NSE.Order.API/Dockerfile
+
+  api-payment:
+    image: willianbrito00/nerdstore-api-payment:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./services/Payment/NSE.Payment.API/Dockerfile
+
+  api-bff-checkout:
+    image: willianbrito00/nerdstore-api-bff-checkout:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./api-gateways/Checkout/NSE.Bff.Checkout/Dockerfile
+
+  web-mvc:
+    image: willianbrito00/nerdstore-web-mvc-ecommerce:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./web/MVC/NSE.WebApp.MVC/Dockerfile
+
+  web-status:
+    image: willianbrito00/nerdstore-web-status:${TAG}
+    build:
+      context: ../../src
+      dockerfile: ./web/Status/NSE.WebApp.Status/Dockerfile
