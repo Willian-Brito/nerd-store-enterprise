@@ -223,20 +223,35 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 - [ ] Testes e2e
 - [ ] Rate Limiting
 - [x] Conteinerização
-- [ ] CI/CD Pipelines
-  - [ ] Versionamento
-  - [ ] Build
-  - [ ] Testes Unitários
-  - [ ] Gerar Docker Image
-  - [ ] Subir Imagem no Docker Hub
-- [ ] Security Pipeline (DevSecOps) 
-  - [ ] SAST - Static Application Security Testing
-  - [ ] SCA - Software Composition Analysis
-  - [ ] IaC - Infra as Code
-  - [ ] Security Container Scan
-  - [ ] DAST - Dynamic Application Security Testing
-  - [ ] Integração com DefectDojo
+- [x] CI/CD Pipelines
+  - [x] Versionamento
+  - [x] Build
+  - [x] Testes Unitários
+  - [x] Gerar Docker Image
+  - [x] Subir Imagem no Docker Hub
+- [x] Security Pipeline (DevSecOps) 
+  - [x] SAST - Static Application Security Testing
+  - [x] SCA - Software Composition Analysis
+  - [x] IaC - Infra as Code
+  - [x] Security Container Scan
 - [ ] Logs e Monitoramento
+
+## 🛡️ Práticas DevSecOps
+Este projeto foi implementado práticas de DevSecOps, garantindo segurança em todas as etapas do ciclo de vida da aplicação (SDLC).
+
+### ⚙️ Pipeline de Segurança (CI/CD)
+
+Abaixo está um resumo das etapas executadas em cada build:
+
+1. **Execução do Horusec (SAST):** Identificar vulnerabilidades no código-fonte antes da aplicação ser compilada ou executada.
+2. **Execução do Dependency-Check (SCA):** Detectar bibliotecas e dependências vulneráveis.
+3. **Análise de IaC com KICS:** Analisar arquivos de configuração e infraestrutura (Terraform, Kubernetes, Docker) para encontrar falhas de segurança antes do provisionamento.
+4. **Varredura de containers com Trivy:** Analisar imagens Docker em busca de vulnerabilidades em pacotes do sistema operacional e bibliotecas de aplicação.
+
+#### 🛠️ Secure Pipeline
+<p align="center">
+    <img src="docs/img/devsecops-pipeline.jpeg" />
+</p>
 
 ## 📁 Estrutura de Pastas
 

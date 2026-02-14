@@ -267,3 +267,139 @@ jobs:
             api-bff-checkout.tar
             web-mvc.tar
             web-status.tar
+
+  # ======================================================
+  # 7. Analise de Segurança da Imagem Docker
+  # ======================================================
+  container-scan:
+    needs: [versioning, docker-build-images]
+    runs-on: ubuntu-latest
+    name: Container Scan - Trivy Scan Docker Images
+
+    env:
+      TAG: ${{ needs.versioning.outputs.version }}
+
+    steps:
+      - name: Download Docker images artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-images
+          path: .
+
+      - name: List files
+        run: ls -la images
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Load Docker images
+        run: |
+          docker load -i api-identity.tar
+          docker load -i api-cart.tar
+          docker load -i api-catalog.tar
+          docker load -i api-customers.tar
+          docker load -i api-order.tar
+          docker load -i api-payment.tar
+          docker load -i api-bff-checkout.tar
+          docker load -i web-mvc.tar
+          docker load -i web-status.tar
+
+      - name: Run Trivy Scan Images
+        run: |
+          mkdir trivy-reports
+
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-identity.txt willianbrito00/nerdstore-api-identity:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-cart.txt willianbrito00/nerdstore-api-cart:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-catalog.txt willianbrito00/nerdstore-api-catalog:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-customers.txt willianbrito00/nerdstore-api-customers:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-order.txt willianbrito00/nerdstore-api-order:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-payment.txt willianbrito00/nerdstore-api-payment:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/api-bff-checkout.txt willianbrito00/nerdstore-api-bff-checkout:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/web-mvc.txt willianbrito00/nerdstore-web-mvc-ecommerce:${{ env.TAG }}
+          trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/web-status.txt willianbrito00/nerdstore-web-status:${{ env.TAG }}
+      
+      - name: Upload Trivy Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-reports
+          path: trivy-reports
+
+  # ======================================================
+  # 8. Push das Imagens para o Docker Hub
+  # ======================================================
+  docker-push:
+    needs: [versioning, container-scan]
+    runs-on: ubuntu-latest
+    name: Push Docker Images
+
+    env:
+      VERSION: ${{ needs.versioning.outputs.version }}
+      DOCKER_REPO: ${{ vars.DOCKERHUB_REPOSITORY }}
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: docker-images
+          path: .
+
+      - name: Load Docker images
+        run: |
+          docker load -i api-identity.tar
+          docker load -i api-cart.tar
+          docker load -i api-catalog.tar
+          docker load -i api-customers.tar
+          docker load -i api-order.tar
+          docker load -i api-payment.tar
+          docker load -i api-bff-checkout.tar
+          docker load -i web-mvc.tar
+          docker load -i web-status.tar
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Tag Latest (only main)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag $DOCKER_REPO/nerdstore-api-identity:$VERSION $DOCKER_REPO/nerdstore-api-identity:latest
+          docker tag $DOCKER_REPO/nerdstore-api-cart:$VERSION $DOCKER_REPO/nerdstore-api-cart:latest
+          docker tag $DOCKER_REPO/nerdstore-api-catalog:$VERSION $DOCKER_REPO/nerdstore-api-catalog:latest
+          docker tag $DOCKER_REPO/nerdstore-api-customers:$VERSION $DOCKER_REPO/nerdstore-api-customers:latest
+          docker tag $DOCKER_REPO/nerdstore-api-order:$VERSION $DOCKER_REPO/nerdstore-api-order:latest
+          docker tag $DOCKER_REPO/nerdstore-api-payment:$VERSION $DOCKER_REPO/nerdstore-api-payment:latest
+          docker tag $DOCKER_REPO/nerdstore-api-bff-checkout:$VERSION $DOCKER_REPO/nerdstore-api-bff-checkout:latest
+          docker tag $DOCKER_REPO/nerdstore-web-mvc-ecommerce:$VERSION $DOCKER_REPO/nerdstore-web-mvc-ecommerce:latest
+          docker tag $DOCKER_REPO/nerdstore-web-status:$VERSION $DOCKER_REPO/nerdstore-web-status:latest
+          
+      - name: Push Version Tags
+        run: |
+          docker push $DOCKER_REPO/nerdstore-api-identity:$VERSION
+          docker push $DOCKER_REPO/nerdstore-api-cart:$VERSION
+          docker push $DOCKER_REPO/nerdstore-api-catalog:$VERSION
+          docker push $DOCKER_REPO/nerdstore-api-customers:$VERSION
+          docker push $DOCKER_REPO/nerdstore-api-order:$VERSION
+          docker push $DOCKER_REPO/nerdstore-api-payment:$VERSION
+          docker push $DOCKER_REPO/nerdstore-api-bff-checkout:$VERSION
+          docker push $DOCKER_REPO/nerdstore-web-mvc-ecommerce:$VERSION
+          docker push $DOCKER_REPO/nerdstore-web-status:$VERSION
+            
+      - name: Push Latest Tags
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker push $DOCKER_REPO/nerdstore-api-identity:latest
+          docker push $DOCKER_REPO/nerdstore-api-cart:latest
+          docker push $DOCKER_REPO/nerdstore-api-catalog:latest
+          docker push $DOCKER_REPO/nerdstore-api-customers:latest
+          docker push $DOCKER_REPO/nerdstore-api-order:latest
+          docker push $DOCKER_REPO/nerdstore-api-payment:latest
+          docker push $DOCKER_REPO/nerdstore-api-bff-checkout:latest
+          docker push $DOCKER_REPO/nerdstore-web-mvc-ecommerce:latest
+          docker push $DOCKER_REPO/nerdstore-web-status:latest
