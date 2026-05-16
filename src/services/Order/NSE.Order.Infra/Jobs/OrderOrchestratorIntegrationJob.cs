@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSE.Core.Messages.Integration;
 using NSE.Order.Application.Queries.Order;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 
 namespace NSE.Order.Infra.Jobs;
 
@@ -59,8 +59,7 @@ public class OrderOrchestratorIntegrationJob : IHostedService, IDisposable
         );
         
         var queue = scope.ServiceProvider.GetRequiredService<IQueue>();
-        await queue.PublishAsync(authorizedOrder);
-
+        await queue.PublishAsync(authorizedOrder, "OrderAuthorized");
         _logger.LogInformation($"Order ID: {order.Id} was sent to lower at stock.");
     }
     

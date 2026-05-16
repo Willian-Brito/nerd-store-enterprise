@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using NSE.Core.DomainObjects;
 using NSE.Core.Messages.Integration;
 using NSE.Order.Domain.Interfaces;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 
 namespace NSE.Order.Infra.Jobs;
 
@@ -19,20 +19,22 @@ public class OrderIntegrationJob : BackgroundService
     }
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        SetSubscribers();
+        SetSubscribers(stoppingToken);
         return Task.CompletedTask;
     }
     
-    private void SetSubscribers()
+    private void SetSubscribers(CancellationToken stoppingToken)
     {
         _queue.SubscribeAsync<OrderCanceledIntegrationEvent>(
-            "PedidoCancelado",
-            async request => await CancelOrder(request)
+            "OrderCanceled",
+            async request => await CancelOrder(request),
+            stoppingToken
         );
 
         _queue.SubscribeAsync<OrderPaidIntegrationEvent>(
-            "PedidoPago",
-            async request => await FinishOrder(request)
+            "OrderPaid",
+            async request => await FinishOrder(request),
+            stoppingToken
         );
     }
     

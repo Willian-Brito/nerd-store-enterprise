@@ -1,0 +1,46 @@
+services: 
+  zookeeper: 
+    image: zookeeper:3.8 
+    container_name: zookeeper 
+    hostname: zookeeper 
+    environment: 
+      ZOOKEEPER_CLIENT_PORT: 2181 
+    ports: 
+      - 2181:2181
+
+  kafka-broker: 
+    image: confluentinc/cp-kafka:7.1.0 
+    container_name: kafka-broker 
+    hostname: kafka-broker 
+    depends_on: 
+      - zookeeper
+
+    ports: 
+      - "9092:9092"
+    environment: 
+      KAFKA_BROKER_ID: 1 
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT_HOST://localhost:9092 
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT 
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT 
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-init-topics:
+    image: confluentinc/cp-kafka:7.1.0
+    depends_on:
+      - kafka-broker
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      echo 'Aguardando Kafka subir...'
+      sleep 10
+
+      kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic OrderAuthorized --partitions 1 --replication-factor 1
+      kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic OrderCanceled --partitions 1 --replication-factor 1
+      kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic OrderDone --partitions 1 --replication-factor 1
+      kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic OrderLoweredStock --partitions 1 --replication-factor 1
+      kafka-topics --bootstrap-server kafka-broker:29092 --create --if-not-exists --topic OrderPaid --partitions 1 --replication-factor 1
+
+      echo 'Tópicos criados com sucesso!'
+      "

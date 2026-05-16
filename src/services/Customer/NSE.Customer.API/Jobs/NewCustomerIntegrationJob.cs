@@ -2,22 +2,25 @@ using NSE.Core.Bus;
 using NSE.Core.Messages.Base;
 using NSE.Core.Messages.Integration;
 using NSE.Customer.API.Application.Commands;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 
 namespace NSE.Customer.API.Jobs;
 
 public class NewCustomerIntegrationJob : BackgroundService
 {
     private readonly IQueue _queue; 
+    private readonly IRpcBus _rpcBus;
     private readonly IServiceProvider _serviceProvider;
     
     public NewCustomerIntegrationJob(
-        IServiceProvider serviceProvider,
-        IQueue queue
+        IServiceProvider serviceProvider, 
+        IQueue queue,
+        IRpcBus rpcBus
     )
     {
         _serviceProvider = serviceProvider;
         _queue = queue;
+        _rpcBus = rpcBus;
     }
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -26,12 +29,13 @@ public class NewCustomerIntegrationJob : BackgroundService
         return Task.CompletedTask;
     }
     
+    // Kafka Implementation (Comment)
     private void SetResponder()
     {
-        _queue.RespondAsync<UserRegisteredIntegrationEvent, ResponseMessage>(
+        _rpcBus.RespondAsync<UserRegisteredIntegrationEvent, ResponseMessage>(
             async message => await AddCustomer(message)
         );
-        _queue.AdvancedBus.Connected += OnConnect;
+        _rpcBus.AdvancedBus.Connected += OnConnect;
     }
     
     private void OnConnect(object s, EventArgs e)

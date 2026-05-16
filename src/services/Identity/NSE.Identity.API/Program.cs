@@ -1,9 +1,11 @@
 
+using NetDevPack.OpenTelemetry.Otlp;
 using NSE.Identity.API.Configuration;
 
 #region Configure Services
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDevPackTracingOtlp(builder.Environment.ApplicationName);
 builder.Services.AddIdentityConfiguration(builder.Configuration);
 builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();

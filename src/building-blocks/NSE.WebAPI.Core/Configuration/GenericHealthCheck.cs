@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using NSE.Core.Utilities;
-using NSE.Queue.RabbitMQ.Configuration;
+using NSE.MessageBroker.Brokers.RabbitMQ.Configuration;
+using NSE.MessageBroker.Configuration;
+using Broker = NSE.MessageBroker.Configuration.MessageBroker;
 using NSE.WebAPI.Core.DatabaseFlavor;
 
 namespace NSE.WebAPI.Core.Configuration;
@@ -21,10 +22,23 @@ public static class GenericHealthCheck
             .AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), new[] { "api" });
 
-        var queueConnStr = configuration.GetMessageQueueConnection("MessageBus");
+        var settings = configuration
+            .GetSection("MessageBroker")
+            .Get<QueueSettings>();
 
-        if(queueConnStr.IsPresent())
-            checkBuilder.AddRabbitMqHealthCheck(queueConnStr);
+        if (settings is not null)
+        {
+            switch (settings.Provider)
+            {
+                case Broker.RabbitMq:
+                    checkBuilder.AddRabbitMqHealthCheck(settings.ConnectionString);
+                    break;
+
+                case Broker.Kafka:
+                    checkBuilder.AddKafkaHealthCheck(settings.ConnectionString);
+                    break;
+            }
+        }
 
         var (database, connString) = DatabaseProviderDetector.Detect(configuration);
         return database switch

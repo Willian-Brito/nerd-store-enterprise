@@ -23,7 +23,7 @@ services:
             SA_PASSWORD: "MyDB@123"
             ACCEPT_EULA: "Y"
         healthcheck:
-            test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P MyDB@123 -Q 'SELECT 1'" ]
+            test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -C -S localhost -U sa -P MyDB@123 -Q 'SELECT 1'" ]
             interval: 3s
             timeout: 5s
             retries: 10
@@ -48,6 +48,8 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_healthy
+            # kafka-broker:
+            #     condition: service_started
 
     api-cart:
         image: willianbrito00/nerdstore-api-cart:${TAG}
@@ -68,6 +70,8 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_healthy
+            # kafka-broker:
+            #     condition: service_started
 
     api-catalog:
         image: willianbrito00/nerdstore-api-catalog:${TAG}
@@ -88,6 +92,8 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_healthy
+            # kafka-broker:
+            #     condition: service_started
 
     api-customers:
         image: willianbrito00/nerdstore-api-customers:${TAG}
@@ -108,6 +114,8 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_healthy
+            # kafka-broker:
+            #     condition: service_started
 
     api-order:
         image: willianbrito00/nerdstore-api-order:${TAG}
@@ -129,6 +137,8 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_healthy
+            # kafka-broker:
+            #     condition: service_started
 
     api-payment:
         image: willianbrito00/nerdstore-api-payment:${TAG}
@@ -151,6 +161,8 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_healthy
+            # kafka-broker:
+            #     condition: service_started
 
     api-bff-checkout:
         image: willianbrito00/nerdstore-api-bff-checkout:${TAG}

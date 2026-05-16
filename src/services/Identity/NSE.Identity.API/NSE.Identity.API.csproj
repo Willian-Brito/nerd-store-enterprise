@@ -14,6 +14,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
+    <PackageReference Include="NetDevPack.OpenTelemetry.Extensions" Version="1.0.0-alpha1" />
+    <PackageReference Include="NetDevPack.OpenTelemetry.Otlp" Version="1.0.0-alpha1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\building-blocks\NSE.Core\NSE.Core.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.Security\NSE.Security.csproj" />
-    <ProjectReference Include="..\..\..\building-blocks\NSE.Queue\NSE.Queue.csproj" />
+    <ProjectReference Include="..\..\..\building-blocks\NSE.MessageBroker\NSE.MessageBroker.csproj" />
     <ProjectReference Include="..\..\..\building-blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
   </ItemGroup>
 

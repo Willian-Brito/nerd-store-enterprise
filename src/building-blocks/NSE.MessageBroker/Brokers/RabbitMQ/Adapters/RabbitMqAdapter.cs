@@ -2,13 +2,13 @@ using EasyNetQ;
 using EasyNetQ.Internals;
 using NSE.Core.Messages.Base;
 using NSE.Core.Messages.Integration;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 using Polly;
 using RabbitMQ.Client.Exceptions;
 
-namespace NSE.Queue.RabbitMQ.Adapters;
+namespace NSE.MessageBroker.Brokers.RabbitMQ.Adapters;
 
-public class RabbitMqAdapter : IQueue
+public class RabbitMqAdapter : IQueue, IRpcBus
 {
     private IBus _bus;
     private readonly string _connectionString;
@@ -22,35 +22,21 @@ public class RabbitMqAdapter : IQueue
         TryConnect();
     }
 
-    public void Publish<T>(T message) where T : IntegrationEvent
-    {
-        TryConnect();
-        _bus.PubSub.Publish(message);
-    }
-
-    public async Task PublishAsync<T>(T message) where T : IntegrationEvent
+    public async Task PublishAsync<T>(T message, string topic = null) where T : IntegrationEvent
     {  
         TryConnect();
         await _bus.PubSub.PublishAsync(message);
     }
 
-    public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
-    {    
+    public async Task SubscribeAsync<T>(
+        string topic,
+        Func<T, Task> onMessage, 
+        CancellationToken cancellationToken = default
+    ) where T : IntegrationEvent
+    {
         TryConnect();
-        _bus.PubSub.Subscribe(subscriptionId, onMessage);
-    }
-
-    public void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
-    {        
-        TryConnect();
-        _bus.PubSub.SubscribeAsync(subscriptionId, onMessage);
-    }
-
-    public TResponse Request<TRequest, TResponse>(TRequest request) where TRequest : IntegrationEvent
-        where TResponse : ResponseMessage
-    {    
-        TryConnect();
-        return _bus.Rpc.Request<TRequest, TResponse>(request);
+        var subscriptionId = topic;
+        await _bus.PubSub.SubscribeAsync(subscriptionId, onMessage);
     }
 
     public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
@@ -58,12 +44,6 @@ public class RabbitMqAdapter : IQueue
     {       
         TryConnect();
         return await _bus.Rpc.RequestAsync<TRequest, TResponse>(request);
-    }
-
-    public IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
-        where TRequest : IntegrationEvent where TResponse : ResponseMessage
-    {        
-        return _bus.Rpc.Respond(responder);
     }
 
     public AwaitableDisposable<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)

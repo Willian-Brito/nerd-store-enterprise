@@ -1,12 +1,12 @@
 using MediatR;
 using NSE.Core.Messages.Integration;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 
 namespace NSE.Order.Application.Events;
 
 public class OrderEventHandler: INotificationHandler<OrderDoneEvent>
 {
-    private readonly IQueue _queue;
+    private readonly IQueue _queue;    
 
     public OrderEventHandler(IQueue queue)
     {
@@ -15,6 +15,6 @@ public class OrderEventHandler: INotificationHandler<OrderDoneEvent>
 
     public async Task Handle(OrderDoneEvent message, CancellationToken cancellationToken)
     {
-        await _queue.PublishAsync(new OrderDoneIntegrationEvent(message.CustomerId));
+        await _queue.PublishAsync(new OrderDoneIntegrationEvent(message.CustomerId), "OrderDone");
     }
 }

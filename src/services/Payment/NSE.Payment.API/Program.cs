@@ -1,3 +1,4 @@
+using NetDevPack.OpenTelemetry.Otlp;
 using NSE.Payment.API.Configuration;
 using NSE.WebAPI.Core.Configuration;
 using NSE.WebAPI.Core.Identity;
@@ -6,10 +7,11 @@ using NSE.WebAPI.Core.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDevPackTracingOtlp(builder.Environment.ApplicationName);
 builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddQueueConfiguration(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
-builder.Services.RegisterServices();
+builder.Services.RegisterServices(builder.Configuration);
 #endregion
 
 #region Configura Pipeline

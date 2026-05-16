@@ -6,7 +6,8 @@ using NSE.Order.Application.DTOs;
 using NSE.Order.Application.Events;
 using NSE.Order.Domain.Entities.Vouchers.Specs;
 using NSE.Order.Domain.Interfaces;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
+using NSE.WebAPI.Core.Http;
 using Entities = NSE.Order.Domain.Entities.Orders;
 
 namespace NSE.Order.Application.Commands;
@@ -14,19 +15,22 @@ namespace NSE.Order.Application.Commands;
 public class OrderCommandHandler : CommandHandler,
     IRequestHandler<AddOrderCommand, ValidationResult>
 {
-    private readonly IQueue _queue;
+    // private readonly IQueue _queue;
+    private readonly IRestClient _restClient;
     private readonly IOrderRepository _orderRepository;
     private readonly IVoucherRepository _voucherRepository;
 
     public OrderCommandHandler(
         IVoucherRepository voucherRepository,
         IOrderRepository orderRepository,
-        IQueue queue
+        // IQueue queue,
+        IRestClient restClient
     )
     {
         _voucherRepository = voucherRepository;
         _orderRepository = orderRepository;
-        _queue = queue;
+        // _queue = queue;
+        _restClient = restClient;
     }
 
     public async Task<ValidationResult> Handle(AddOrderCommand message, CancellationToken cancellationToken)
@@ -146,8 +150,12 @@ public class OrderCommandHandler : CommandHandler,
             SecurityCode = message.SecurityCode
         };
         
-        var result = await _queue.RequestAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
+        // RabbitMQ
+        // var result = await _queue.RequestAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
 
+        // RestClient
+        var result = await _restClient.PostAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
+        
         if (result.ValidationResult.IsValid) return true;
 
         result.ValidationResult.Errors.ForEach(error => AddError(error.ErrorMessage)); 

@@ -24,7 +24,7 @@ public class AuthService : Service, IAuthService
         IHttpContextAccessor httpContextAccessor
     )
     {
-        httpClient.BaseAddress = new Uri(settings.Value.AuthUrl);
+        httpClient.BaseAddress = new Uri(settings.Value.AuthUrl); 
 
         _httpClient = httpClient;
         _user = user;

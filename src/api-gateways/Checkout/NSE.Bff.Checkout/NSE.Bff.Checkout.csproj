@@ -13,6 +13,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="NetDevPack.OpenTelemetry.Extensions" Version="1.0.0-alpha1" />
+    <PackageReference Include="NetDevPack.OpenTelemetry.Otlp" Version="1.0.0-alpha1" />
     
     <PackageReference Include="Grpc.Net.ClientFactory" Version="2.71.0" />
     <PackageReference Include="Grpc.Tools" Version="2.72.0" PrivateAssets="All" />

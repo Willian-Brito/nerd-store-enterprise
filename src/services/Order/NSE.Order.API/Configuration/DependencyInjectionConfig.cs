@@ -9,13 +9,25 @@ using NSE.Order.Domain.Interfaces;
 using NSE.Order.Infra.Context;
 using NSE.Order.Infra.Repository;
 using NSE.Security.Identity.User;
+using NSE.Core.Messages.Integration;
+using NSE.WebAPI.Core.Http;
+using NSE.WebAPI.Core.Extensions;
 
 namespace NSE.Order.API.Configuration;
 
 public static class DependencyInjectionConfig
 {
-    public static void RegisterServices(this IServiceCollection services)
+    public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
+        // Kafka Implementation
+        var baseAddress = configuration["PaymentUrl"];
+        services.AddSingleton<IRestClient, RestClient>();
+        services.AddHttpClient(nameof(OrderInitiatedIntegrationEvent), options =>
+        {            
+            options.BaseAddress = new Uri($"{baseAddress}/api/payment/order-initiated");
+        })
+        .AllowSelfSignedCertificate();
+
         // API
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IAspNetUser, AspNetUser>();

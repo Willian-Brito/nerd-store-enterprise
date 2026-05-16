@@ -1,3 +1,4 @@
+using NetDevPack.OpenTelemetry.Otlp;
 using NSE.Customer.API.Configuration;
 using NSE.WebAPI.Core.Configuration;
 using NSE.WebAPI.Core.Identity;
@@ -6,6 +7,7 @@ using NSE.WebAPI.Core.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDevPackTracingOtlp(builder.Environment.ApplicationName);
 builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();

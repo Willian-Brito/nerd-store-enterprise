@@ -2,7 +2,7 @@ using NSE.Catalog.API.Data.Models.Interfaces;
 using NSE.Catalog.API.Models.Entities;
 using NSE.Core.DomainObjects;
 using NSE.Core.Messages.Integration;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 
 namespace NSE.Catalog.API.Jobs;
 
@@ -19,15 +19,16 @@ public class CatalogIntegrationJob : BackgroundService
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        SetSubscribers();
+        SetSubscribers(stoppingToken);
         return Task.CompletedTask;
     }
     
-    private void SetSubscribers()
+    private void SetSubscribers(CancellationToken stoppingToken)
     {
         _queue.SubscribeAsync<OrderAuthorizedIntegrationEvent>(
-            "PedidoAutorizado", async request =>
-            await WriteDownInventory(request)
+            "OrderAuthorized", 
+            async request => await WriteDownInventory(request),
+            stoppingToken
         );
     }
     
@@ -72,12 +73,12 @@ public class CatalogIntegrationJob : BackgroundService
             throw new DomainException($"Problems updating stock for order {message.OrderId}");
     
         var productTaken = new OrderLoweredStockIntegrationEvent(message.CustomerId, message.OrderId);
-        await _queue.PublishAsync(productTaken);
+        await _queue.PublishAsync(productTaken, "OrderLoweredStock");
     }
     
     private async Task CancelOrderWithoutStock(OrderAuthorizedIntegrationEvent message)
     {
         var orderCancelled = new OrderCanceledIntegrationEvent(message.CustomerId, message.OrderId);
-        await _queue.PublishAsync(orderCancelled);
+        await _queue.PublishAsync(orderCancelled, "OrderCanceled");
     }
 }

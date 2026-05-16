@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 
-namespace NSE.Queue.RabbitMQ.Configuration;
+namespace NSE.MessageBroker.Brokers.RabbitMQ.Configuration;
 
 public static class RabbitMqHealthCheck
 {

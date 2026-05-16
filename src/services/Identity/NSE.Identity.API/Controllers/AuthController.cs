@@ -5,17 +5,20 @@ using Microsoft.IdentityModel.Tokens;
 using NSE.Core.Messages.Base;
 using NSE.Core.Messages.Integration;
 using NSE.Identity.API.Models;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 using NSE.Security.Identity.Interfaces;
+using NSE.Security.Identity.Jwt.Model;
 using NSE.Security.Jwt.Core.Interfaces;
 using NSE.WebAPI.Core.Controllers;
+using NSE.WebAPI.Core.Http;
 
 namespace NSE.Identity.API.Controllers;
 
 [Route("api/identity")]
 public class AuthController : MainController
 {
-    private readonly IQueue _queue;
+    private readonly IRpcBus _rpcBus;
+    private readonly IRestClient _restClient;
     private readonly IJwtBuilder _jwtBuilder;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
@@ -24,13 +27,15 @@ public class AuthController : MainController
         IJwtBuilder jwtBuilder,
         SignInManager<IdentityUser> signInManager,
         UserManager<IdentityUser> userManager,
-        IQueue queue
+        IRpcBus rpcBus,
+        IRestClient restClient
     )
     {
         _jwtBuilder = jwtBuilder;
         _signInManager = signInManager;
         _userManager = userManager;
-        _queue = queue;
+        _rpcBus = rpcBus;
+        _restClient = restClient;
     }
     
     [HttpPost("new-account")]
@@ -50,13 +55,14 @@ public class AuthController : MainController
         if (result.Succeeded)
         {
             var customerResult = await RegisterUser(newUser);
+            // var (jwt, customerResult) = await RegisterUserRestClient(newUser); // Kafka Implementation
     
             if (!customerResult.ValidationResult.IsValid)
             {
                 await _userManager.DeleteAsync(user);
                 return CustomResponse(customerResult.ValidationResult);
             }
-    
+            
             var jwt = await _jwtBuilder
                 .WithEmail(newUser.Email)
                 .WithJwtClaims()
@@ -107,7 +113,33 @@ public class AuthController : MainController
         return CustomResponse();
     }
     
+    // Kafka Implementation (Comment)
     private async Task<ResponseMessage> RegisterUser(NewUser newUser)
+    {
+        var user = await _userManager.FindByEmailAsync(newUser.Email);
+        ArgumentNullException.ThrowIfNull(user);
+    
+        var userRegistered =  new UserRegisteredIntegrationEvent(
+            Guid.Parse(user.Id), 
+            newUser.Name, 
+            newUser.Email, 
+            newUser.SocialNumber
+        );
+    
+        try
+        {
+            var response = await _rpcBus.RequestAsync<UserRegisteredIntegrationEvent, ResponseMessage>(userRegistered);
+            return response;
+        }
+        catch (Exception)
+        {
+            await _userManager.DeleteAsync(user);
+            throw;
+        }
+    }
+    
+    // Kafka Implementation
+    private async Task<(UserResponse, ResponseMessage)> RegisterUserRestClient(NewUser newUser)
     {
         var user = await _userManager.FindByEmailAsync(newUser.Email);
         ArgumentNullException.ThrowIfNull(user);
@@ -121,10 +153,19 @@ public class AuthController : MainController
 
         try
         {
-            var response = await _queue.RequestAsync<UserRegisteredIntegrationEvent, ResponseMessage>(userRegistered);
-            return response;
+            // RestClient
+            var jwt = await _jwtBuilder
+                .WithEmail(newUser.Email)
+                .WithJwtClaims()
+                .WithUserClaims()
+                .WithUserRoles()
+                .WithRefreshToken()
+                .BuildUserResponse();
+            
+            var response = await _restClient.PostAsync<UserRegisteredIntegrationEvent, ResponseMessage>(userRegistered, jwt.AccessToken);
+            return (jwt, response);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             await _userManager.DeleteAsync(user);
             throw;

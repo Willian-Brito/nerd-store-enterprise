@@ -11,7 +11,7 @@ COPY ["services/Identity/NSE.Identity.API/NSE.Identity.API.csproj", "services/Id
 COPY ["building-blocks/NSE.Security/NSE.Security.csproj", "building-blocks/NSE.Security/"]
 COPY ["building-blocks/NSE.WebAPI.Core/NSE.WebAPI.Core.csproj", "building-blocks/NSE.WebAPI.Core/"]
 COPY ["building-blocks/NSE.Core/NSE.Core.csproj", "building-blocks/NSE.Core/"]
-COPY ["building-blocks/NSE.Queue/NSE.Queue.csproj", "building-blocks/NSE.Queue/"]
+COPY ["building-blocks/NSE.MessageBroker/NSE.MessageBroker.csproj", "building-blocks/NSE.MessageBroker/"]
 RUN dotnet restore "services/Identity/NSE.Identity.API/NSE.Identity.API.csproj"
 COPY . .
 WORKDIR "services/Identity/NSE.Identity.API"

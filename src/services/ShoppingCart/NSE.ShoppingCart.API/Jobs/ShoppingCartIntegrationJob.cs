@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NSE.Core.Messages.Integration;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 using NSE.ShoppingCart.API.Data;
 
 namespace NSE.ShoppingCart.API.Jobs;
@@ -18,15 +18,16 @@ public class ShoppingCartIntegrationJob : BackgroundService
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        SetSubscribers();
+        SetSubscribers(stoppingToken);
         return Task.CompletedTask;
     }
     
-    private void SetSubscribers()
+    private void SetSubscribers(CancellationToken stoppingToken)
     {
         _queue.SubscribeAsync<OrderDoneIntegrationEvent>(
-            "PedidoRealizado", 
-            async request => await RemoveShoppingCart(request)
+            "OrderDone", 
+            async request => await RemoveShoppingCart(request),
+            stoppingToken
         );
     }
     

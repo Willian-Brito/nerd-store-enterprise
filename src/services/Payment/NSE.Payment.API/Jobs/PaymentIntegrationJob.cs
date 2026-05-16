@@ -3,48 +3,54 @@ using NSE.Core.Messages.Base;
 using NSE.Core.Messages.Integration;
 using NSE.Payment.API.Services;
 using Models = NSE.Payment.API.Models;
-using NSE.Queue.Abstractions;
+using NSE.MessageBroker.Abstractions;
 
 namespace NSE.Payment.API.Jobs;
 
 public class PaymentIntegrationJob : BackgroundService
 {
     private readonly IQueue _queue;
+    private readonly IRpcBus _rpcBus;
     private readonly IServiceProvider _serviceProvider;
 
     public PaymentIntegrationJob(
-        IServiceProvider serviceProvider,
-        IQueue queue
+        IServiceProvider serviceProvider, 
+        IQueue queue,
+        IRpcBus rpcBus
     )
     {
         _serviceProvider = serviceProvider;
         _queue = queue;
+        _rpcBus = rpcBus;
     }
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         SetResponder();
-        SetSubscribers();
+        SetSubscribers(stoppingToken);
         return Task.CompletedTask;
     }
     
+    // Kafka Implementation (Comment)
     private void SetResponder()
     {
-        _queue.RespondAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(
+        _rpcBus.RespondAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(
             async request => await AuthorizeTransaction(request)
         );
     }
 
-    private void SetSubscribers()
+    private void SetSubscribers(CancellationToken stoppingToken)
     {
         _queue.SubscribeAsync<OrderCanceledIntegrationEvent>(
-            "PedidoCancelado", 
-            async request => await CancelTransaction(request)
+            "OrderCanceled", 
+            async request => await CancelTransaction(request),
+            stoppingToken
         );
 
         _queue.SubscribeAsync<OrderLoweredStockIntegrationEvent>(
-            "PedidoBaixadoEstoque", 
-            async request => await CapturePayment(request)
+            "OrderLoweredStock", 
+            async request => await CapturePayment(request),
+            stoppingToken
         );
     }
     
@@ -87,6 +93,7 @@ public class PaymentIntegrationJob : BackgroundService
         if (!response.ValidationResult.IsValid)
             throw new DomainException($"Error trying to get order payment {message.OrderId}");
 
-        await _queue.PublishAsync(new OrderPaidIntegrationEvent(message.CustomerId, message.OrderId));
+        var orderPaid = new OrderPaidIntegrationEvent(message.CustomerId, message.OrderId);
+        await _queue.PublishAsync(orderPaid, "OrderPaid");
     }
 }

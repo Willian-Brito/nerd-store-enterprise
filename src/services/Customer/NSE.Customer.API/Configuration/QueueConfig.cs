@@ -1,17 +1,12 @@
 using NSE.Customer.API.Jobs;
-using NSE.Queue.RabbitMQ.Configuration;
+using NSE.MessageBroker.Configuration;
 
 namespace NSE.Customer.API.Configuration;
 
 public static class QueueConfig
 {
-    public static void AddQueueConfiguration(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
+    public static void AddQueueConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetMessageQueueConnection("MessageBus");
-        services.AddQueueRabbitMq(connectionString)
-            .AddHostedService<NewCustomerIntegrationJob>();
+        services.AddMessageBroker(configuration).AddHostedService<NewCustomerIntegrationJob>();
     }
 }

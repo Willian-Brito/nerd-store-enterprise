@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NSE.Core.Bus;
+using NSE.Core.Messages.Base;
 using NSE.Customer.API.Application.Commands;
 using NSE.Customer.API.Data.Models.Interfaces;
 using NSE.Security.Identity.User;
@@ -37,5 +38,13 @@ public class CustomerController : MainController
     {
         address.CustomerId = _user.GetUserId();
         return CustomResponse(await _messageBus.SendCommand(address));
+    }
+    
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateCustomer(NewCustomerCommand newCustomer)
+    {
+        newCustomer.Id = _user.GetUserId();
+        var result = await _messageBus.SendCommand(newCustomer);
+        return CustomResponse(new ResponseMessage(result));
     }
 }

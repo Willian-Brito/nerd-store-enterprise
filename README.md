@@ -18,6 +18,7 @@ Sua implementação foi baseada em diversos outros repositórios voltados para *
 - [GitHub Actions](https://github.com/Willian-Brito/github-actions-learning)
 - [Modelagem de Domínios Ricos](https://github.com/Willian-Brito/nerd-store)
 - [Dominando Testes de Software](https://github.com/Willian-Brito/dominando-testes-de-software)
+- [Dominando o Apache Kafka](https://github.com/Willian-Brito/kafka-learning)
 
 ## 🎯 Arquitetura de Solução
 
@@ -177,11 +178,13 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
   - gRPC
   - Eventos de filas
 
-- **Mensagerias**
+- **Mensageria**
   - Background Services
   - RabbitMQ
-  - EasyNetQ
-  - Kafka
+  - Apache Kafka
+  - Bibliotecas
+    - EasyNetQ
+    - Confluent.Kafka
 
 - **Frontend: Linguagens e Frameworks**
   - AspNet MVC
@@ -196,9 +199,10 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
   - Kubernetes (k8s)
   - NGINX  
 
-- **Logs e Monitoramento**
+- **Observabilidade**
   - Prometheus
   - Grafana
+  - Jaeger
 
 ## 📦 Padrões de Design Implementados
 - [x] SOLID
@@ -219,6 +223,8 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 - [x] Circuit Breaker
 - [x] Health Checks
 - [x] API Gateway / BFF
+- [x] Request/Response Pattern
+- [x] Pub/Sub Pattern
 - [ ] Event Sourcing
 - [ ] Testes Unitários
 - [ ] Testes de Integração
@@ -273,6 +279,37 @@ Clone o repositório do `nerd-store-enterprise` e navegue até a pasta **infra/d
 
 ```bash
 docker-compose up
+```
+
+### </> Se você quiser executar em ambiente de desenvolvimento para debug:
+
+```bash
+# Rodar RabbitMQ Local
+docker run -d --hostname rabbit-local --name rabbit-nerdstore-local -p 15672:15672 -p 5672:5672 rabbitmq:management
+
+http://localhost:15672/
+guest
+guest
+
+# Rodar Kafka Local
+cd infra/docker # Entrar na pasta do docker
+docker compose -f docker-compose-kafka-dev.yml up -d # Rodar kafka
+docker exec -it kafka-broker kafka-topics --bootstrap-server kafka-broker:29092 --list # Verificar topicos criados
+
+# Rodar Jaeger Local
+docker run --name jaeger -p 13133:13133 -p 16686:16686 -p 4317:4317 -d --restart=unless-stopped jaegertracing/opentelemetry-all-in-one
+
+localhost:16686
+
+# Rodar PostgreeSQL Local
+docker run -d --hostname postgres-local --name postgres-nerdstore-local -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=meubanco -p 5432:5432 postgres:16
+
+# Rodar SqlServer Local
+docker run -d --hostname sqlserver-local --name sqlserver-nerdstore-local -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=sql@2019' -p 1433:1433 mcr.microsoft.com/mssql/server:2019-latest
+
+# Apps
+Status: https://localhost:4211
+E-commerce: https://localhost:5401
 ```
 
 ### 🏗️ Se você quiser gerar as imagens locais e executar a aplicação NerdStore no seu ambiente Docker:
@@ -472,7 +509,7 @@ docker-compose -f docker-compose-local-light.yml up --build
   <img src="docs/img/telas/meus-pedidos.png" />
 </div>
 
-## ❤️‍🩹 Nerd Store: Status
+## ❤️‍🩹 Nerd Store: Status (HealthCheck)
 
 #### 🖥️ Monitoramento dos Microsserviços
 <div align="center">
@@ -487,6 +524,13 @@ docker-compose -f docker-compose-local-light.yml up --build
 #### 🖥️ Depêndencias do BFF
 <div align="center">
   <img src="docs/img/telas/status-checkout-selected.png" />
+</div>
+
+## 🕵🏻‍♀️ Observabilidade
+
+#### 🖥️ Jaeger (Tracking)
+<div align="center">
+  <img src="docs/img/telas/jaeger-tracing.png" />
 </div>
 
 ## 📝 Licença

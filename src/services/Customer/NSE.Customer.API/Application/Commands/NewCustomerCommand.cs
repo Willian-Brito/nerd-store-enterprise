@@ -5,10 +5,12 @@ namespace NSE.Customer.API.Application.Commands;
 
 public class NewCustomerCommand : Command
 {
-    public Guid Id { get; }
-    public string Name { get; }
-    public string Email { get; }
-    public string SocialNumber { get; }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string SocialNumber { get; set; }
+
+    public NewCustomerCommand() { }
     
     public NewCustomerCommand(Guid id, string name, string email, string socialNumber)
     {

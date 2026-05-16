@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using NetDevPack.OpenTelemetry.Otlp;
 using NSE.ShoppingCart.API.Configuration;
 using NSE.ShoppingCart.API.Endpoints;
 using NSE.ShoppingCart.API.Models;
@@ -7,6 +8,7 @@ using NSE.WebAPI.Core.Identity;
 #region Configure Services
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDevPackTracingOtlp(builder.Environment.ApplicationName);
 builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
