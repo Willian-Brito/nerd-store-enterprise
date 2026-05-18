@@ -240,6 +240,7 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 - [x] Security Pipeline (DevSecOps) 
   - [x] SAST - Static Application Security Testing
   - [x] SCA - Software Composition Analysis
+  - [x] Secret Scan
   - [x] IaC - Infra as Code
   - [x] Security Container Scan
 - [ ] Logs e Monitoramento
