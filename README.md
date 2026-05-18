@@ -252,13 +252,14 @@ Este projeto foi implementado práticas de DevSecOps, garantindo segurança em t
 Abaixo está um resumo das etapas executadas em cada build:
 
 1. **Execução do Horusec (SAST):** Identificar vulnerabilidades no código-fonte antes da aplicação ser compilada ou executada.
-2. **Execução do Dependency-Check (SCA):** Detectar bibliotecas e dependências vulneráveis.
-3. **Análise de IaC com KICS:** Analisar arquivos de configuração e infraestrutura (Terraform, Kubernetes, Docker) para encontrar falhas de segurança antes do provisionamento.
-4. **Varredura de containers com Trivy:** Analisar imagens Docker em busca de vulnerabilidades em pacotes do sistema operacional e bibliotecas de aplicação.
+1. **Execução do Dependency-Check (SCA):** Detectar bibliotecas e dependências vulneráveis.
+1. **Execução do GitLeaks (Secret Scan):** Detectar informações sensíveis que foram parar no repositório por engano, como Tokens de API, Senhas, Chaves SSH, etc.
+1. **Análise de IaC com KICS:** Analisar arquivos de configuração e infraestrutura (Terraform, Kubernetes, Docker) para encontrar falhas de segurança antes do provisionamento.
+1. **Varredura de containers com Trivy:** Analisar imagens Docker em busca de vulnerabilidades em pacotes do sistema operacional e bibliotecas de aplicação.
 
 #### 🛠️ Secure Pipeline
 <p align="center">
-    <img src="docs/img/devsecops-pipeline.jpeg" />
+    <img src="docs/img/devsecops-pipeline-2.png" />
 </p>
 
 ## 📁 Estrutura de Pastas
@@ -269,19 +270,21 @@ Abaixo está um resumo das etapas executadas em cada build:
 
 ## 🚀 Como executar o projeto
 
+### 🐳 Docker
+
 Você pode executar o projeto **NerdStore** em qualquer sistema operacional.  
 **Certifique-se de que o Docker está instalado em seu ambiente.**  
 ([Instalar o Docker](https://docs.docker.com/get-docker/))
 
 Clone o repositório do `nerd-store-enterprise` e navegue até a pasta **infra/docker**. Em seguida:
 
-### ▶️ Se você apenas quiser executar a aplicação NerdStore no seu ambiente Docker:
+#### ▶️ Se você apenas quiser executar a aplicação NerdStore no seu ambiente Docker:
 
 ```bash
 docker-compose up
 ```
 
-### </> Se você quiser executar em ambiente de desenvolvimento para debug:
+#### </> Se você quiser executar em ambiente de desenvolvimento para debug:
 
 ```bash
 # Rodar RabbitMQ Local
@@ -312,7 +315,7 @@ Status: https://localhost:4211
 E-commerce: https://localhost:5401
 ```
 
-### 🏗️ Se você quiser gerar as imagens locais e executar a aplicação NerdStore no seu ambiente Docker:
+#### 🏗️ Se você quiser gerar as imagens locais e executar a aplicação NerdStore no seu ambiente Docker:
 
 Este docker-compose irá fornecer **um container de banco de dados para cada serviço de API.**
 
