@@ -232,6 +232,7 @@ jobs:
   # 5. Análise de Vazamentos de Informações Sensíveis
   # ======================================================
   secrets-scan:
+    needs: versioning
     name: Scan de Segredos (Gitleaks)
     runs-on: ubuntu-latest
 
