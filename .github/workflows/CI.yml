@@ -229,7 +229,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: snyk-html-report
+          name: snyk-report
           path: snyk-report.html
   
   # ======================================================
@@ -239,39 +239,18 @@ jobs:
     needs: versioning
     name: Scan de Segredos (Gitleaks)
     runs-on: ubuntu-latest
-  
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-  
-      - name: Install Gitleaks
-        run: |
-          wget https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz
-          tar -xzf gitleaks_8.24.3_linux_x64.tar.gz
-          sudo mv gitleaks /usr/local/bin/
-  
-      - name: Download HTML Template
-        run: |
-          mkdir -p contrib
-          wget -O contrib/html.tmpl \
-            https://raw.githubusercontent.com/gitleaks/gitleaks/master/contrib/html.tmpl
-  
-      - name: Run Gitleaks HTML Scan
-        continue-on-error: true
-        run: |
-          gitleaks detect \
-            --report-format template \
-            --report-template contrib/html.tmpl \
-            --report-path gitleaks-report.html
-  
-      - name: Upload Gitleaks HTML Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitleaks-html-report
-          path: gitleaks-report.html
+          fetch-depth: 0  # histórico completo para detectar segredos antigos
+
+      - name: Rodar Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
+        continue-on-error: true  # não bloqueia por ser demo educacional
       
   # ======================================================
   # 6. Análise de Segurança de Infra como Código (IaC)
