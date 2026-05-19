@@ -15,7 +15,7 @@ namespace NSE.Order.Application.Commands;
 public class OrderCommandHandler : CommandHandler,
     IRequestHandler<AddOrderCommand, ValidationResult>
 {
-    // private readonly IQueue _queue;
+    private readonly IRpcBus _rpcBus;
     private readonly IRestClient _restClient;
     private readonly IOrderRepository _orderRepository;
     private readonly IVoucherRepository _voucherRepository;
@@ -23,13 +23,13 @@ public class OrderCommandHandler : CommandHandler,
     public OrderCommandHandler(
         IVoucherRepository voucherRepository,
         IOrderRepository orderRepository,
-        // IQueue queue,
+        IRpcBus rpcBus,
         IRestClient restClient
     )
     {
         _voucherRepository = voucherRepository;
         _orderRepository = orderRepository;
-        // _queue = queue;
+        _rpcBus = rpcBus;
         _restClient = restClient;
     }
 
@@ -149,12 +149,11 @@ public class OrderCommandHandler : CommandHandler,
             ExpirationDate = message.ExpirationDate,
             SecurityCode = message.SecurityCode
         };
-        
-        // RabbitMQ
-        // var result = await _queue.RequestAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
+                
+        var result = await _rpcBus.RequestAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
 
-        // RestClient
-        var result = await _restClient.PostAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
+        // Kafka Implementation (RestClient)
+        // var result = await _restClient.PostAsync<OrderInitiatedIntegrationEvent, ResponseMessage>(orderStarted);
         
         if (result.ValidationResult.IsValid) return true;
 
