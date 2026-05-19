@@ -237,16 +237,16 @@ jobs:
   # ======================================================
   secrets-scan:
     needs: versioning
-    name: Scan de Segredos (Gitleaks)
+    name: Secret Scan (Gitleaks)
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # histórico completo para detectar segredos antigos
 
-      - name: Rodar Gitleaks
+      - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
