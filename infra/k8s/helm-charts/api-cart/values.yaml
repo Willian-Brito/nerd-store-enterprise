@@ -1,0 +1,7 @@
+image:
+  repository: willianbrito00/nerdstore-api-cart
+  tag: "latest"
+
+secretRefs:
+  - rabbit-connection
+  - cart-connection

@@ -1,0 +1,10 @@
+image:
+  repository: willianbrito00/nerdstore-api-order
+  tag: "latest"
+
+secretRefs:
+  - rabbit-connection
+  - order-connection
+
+environment:
+  AppSettings__DatabaseType: SqlServer

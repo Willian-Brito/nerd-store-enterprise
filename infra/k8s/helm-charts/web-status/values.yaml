@@ -1,0 +1,41 @@
+image:
+  repository: willianbrito00/nerdstore-web-status
+  tag: latest
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 443
+    scheme: HTTPS
+  initialDelaySeconds: 3
+  periodSeconds: 10
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 443
+    scheme: HTTPS
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+service:
+  port: 80
+  targetPort: http
+
+secretRefs:
+  - status-connection
+
+ingress:
+  enabled: true
+  hosts:
+    - host: status.nerdstore.io
+      paths:
+        - path: /
+          pathType: Prefix
+
+pfx:
+  enabled: true
+
+environment:
+  ASPNETCORE_URLS: http://+;https://+
+  ENDPOINTS: "Identity API|https://api-identity/healthz-infra;BFF Checkout|https://api-bff-checkout/healthz;Frontend Web|http://web-mvc/healthz;Shopping Cart API|https://api-cart/healthz-infra;Catalog API|https://api-catalog/healthz-infra;Customer API|https://api-customer/healthz-infra;Payment API|https://api-payment/healthz-infra;Order API|https://api-orders/healthz-infra"

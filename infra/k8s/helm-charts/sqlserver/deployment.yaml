@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: sqlserver
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: sqlserver
+        environment: test
+        tier: database
+        app: nerd-store
+      name: database
+      namespace: infra
+    spec:
+      containers:
+      - env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: MyDB@123
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        name: database
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/opt/mssql
+          name: sql-data
+      volumes:
+      - name: sql-data
+        persistentVolumeClaim:
+          claimName: sql-pvc
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always

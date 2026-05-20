@@ -1,0 +1,7 @@
+image:
+  repository: willianbrito00/nerdstore-api-catalog
+  tag: "latest"
+
+secretRefs:
+  - rabbit-connection
+  - catalog-connection

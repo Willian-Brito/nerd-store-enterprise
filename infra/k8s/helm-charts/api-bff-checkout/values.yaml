@@ -1,0 +1,22 @@
+image:
+  repository: willianbrito00/nerdstore-api-bff-checkout
+  tag: "latest"
+
+secretRefs:
+  - rabbit-connection
+
+environment:
+  AppSettings__DatabaseType: "None"
+  ShoppingCartUrl: "https://api-cart"
+  CatalogUrl: "https://api-catalog"
+  CustomerUrl: "https://api-customer"
+  PaymentUrl: "https://api-payment"
+  OrderUrl: "https://api-orders"
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: 443
+    scheme: HTTPS
+  initialDelaySeconds: 3
+  periodSeconds: 10

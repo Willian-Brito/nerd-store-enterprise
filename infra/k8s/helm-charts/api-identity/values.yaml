@@ -1,0 +1,7 @@
+image:
+  repository: willianbrito00/nerdstore-api-identity
+  tag: "latest"
+
+secretRefs:
+  - rabbit-connection
+  - identity-connection

@@ -271,7 +271,14 @@ Abaixo está um resumo das etapas executadas em cada build:
 
 ## 🚀 Como executar o projeto
 
-### 🐳 Docker
+O **NerdStore** pode ser executado de duas formas:
+
+- 🐳 **Docker Compose →** ideal para desenvolvimento local rápido e testes.
+- ☸️ **Kubernetes + Minikube →** ideal para simular um ambiente mais próximo de produção utilizando microsserviços orquestrados.
+
+Abaixo você encontrará os passos necessários para executar o projeto em ambos os cenários.
+
+## 🐳 Docker
 
 Você pode executar o projeto **NerdStore** em qualquer sistema operacional.  
 **Certifique-se de que o Docker está instalado em seu ambiente.**  
@@ -324,7 +331,7 @@ Este docker-compose irá fornecer **um container de banco de dados para cada ser
 docker-compose -f docker-compose-local.yml up --build
 ```
 
-### 💡 Se preferir economizar recursos, utilize o docker-compose local simplificado:
+#### 💡 Se preferir economizar recursos, utilize o docker-compose local simplificado:
 
 Este `docke-compose` irá fornecer **apenas um container de banco de dados para todos os serviços de API.**
 
@@ -339,8 +346,93 @@ docker-compose -f docker-compose-local-light.yml up --build
 - http://localhost:7510
 - https://localhost:7511
 
+## ☸️ Kubernetes
 
-### ⚙️ Configurações para VS Code:
+**Kubernetes** (também chamado de **k8s**) é uma **plataforma** open source para **orquestração de contêineres**. 
+
+Ele ajuda a **implantar**, **escalar** e **gerenciar aplicações em contêineres** (como os criados com Docker) de forma automática e eficiente.
+
+### 📋 Pré-requisitos:
+
+#### Antes de começar, você precisará ter instalado em sua máquina:
+
+- **[Kubectl](https://kubernetes.io/docs/tasks/tools/) ->**
+  Ferramenta de linha de comando oficial do Kubernetes utilizada para gerenciar recursos do cluster.
+
+- **[Minikube](https://minikube.sigs.k8s.io/docs/start/) ->**
+  Ferramenta de código aberto que permite executar clusters Kubernetes localmente.
+
+- **[K9s](https://k9scli.io/topics/install/) *(opcional)*  ->**  Interface de terminal (TUI) para gerenciamento e monitoramento de clusters Kubernetes de forma mais prática e produtiva.
+
+- **[Helm](https://helm.sh/docs/intro/install/) ->** Gerenciador de pacotes do Kubernetes utilizado para instalar e versionar aplicações no cluster.
+
+### ▶️ Executando o ambiente Kubernetes
+#### 1️⃣ Acessar pasta de scripts
+```bash
+cd infra/k8s/scripts
+```
+
+#### 2️⃣ Dar permissão de execução aos scripts
+```bash
+chmod +x create-nerdstore-cluster.sh
+chmod +x remove-nerdstore-cluster.sh
+```
+
+#### 3️⃣ Criar o cluster Kubernetes do NerdStore
+
+#### Este script irá:
+
+- Criar o cluster Minikube
+- Habilitar o Ingress Controller
+- Criar namespaces
+- Subir infraestrutura (RabbitMQ, SQL Server, PostgreSQL)
+- Publicar os microsserviços
+- Publicar as aplicações web
+
+```bash
+sh create-nerdstore-cluster.sh
+```
+
+#### 4️⃣ Expor aplicações web com Minikube Tunnel
+
+O comando abaixo cria um IP externo para os serviços LoadBalancer do Kubernetes:
+
+```bash
+minikube tunnel -p nerdstore-enterprise
+```
+> ⚠️ Em alguns sistemas será necessário manter este terminal aberto enquanto estiver utilizando a aplicação.
+
+#### 5️⃣ Configurar resolução de domínio local
+
+Adicione as entradas abaixo no arquivo `/etc/hosts` utilizando o IP retornado pelo `minikube tunnel`.
+
+```bash
+sudo nano /etc/hosts
+```
+
+#### Adicionar:
+```bash
+192.168.49.2 nerdstore.io
+192.168.49.2 status.nerdstore.io
+```
+#### 🌐 URLs da aplicação
+- **E-commerce:** http://nerdstore.io
+- **Status:** http://status.nerdstore.io
+
+### 🧹 Removendo o ambiente Kubernetes
+
+#### O script abaixo remove:
+- Microsserviços
+- Bancos de dados
+- Secrets
+- Namespaces
+- Cluster Minikube
+
+```bash
+sh remove-nerdstore-cluster.sh
+```
+
+## ⚙️ Configurações para VS Code:
 
 - Abra o VSCode no diretório raiz (onde está o arquivo da solução).
 - Crie um novo `launch.json` na seção de debug do VSCode e utilize a configuração abaixo para habilitar a opção **"Start all projects"**.
@@ -535,6 +627,18 @@ docker-compose -f docker-compose-local-light.yml up --build
 #### 🖥️ Jaeger (Tracking)
 <div align="center">
   <img src="docs/img/telas/jaeger-tracing.png" />
+</div>
+
+## 🔳 K9s - Interface para Terminal (TUI) 
+
+#### 🖥 Infra
+<div align="center">
+  <img src="docs/img/k9s-infra.png" />
+</div>
+
+#### 🖧 Microserviços
+<div align="center">
+  <img src="docs/img/k9s-services.png" />
 </div>
 
 ## 📝 Licença

@@ -1,0 +1,7 @@
+image:
+  repository: willianbrito00/nerdstore-api-customers
+  tag: "latest"
+
+secretRefs:
+  - rabbit-connection
+  - customer-connection
