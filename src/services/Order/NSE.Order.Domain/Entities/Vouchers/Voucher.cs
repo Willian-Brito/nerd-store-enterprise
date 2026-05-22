@@ -1,3 +1,4 @@
+using System.Net.Quic;
 using NSE.Core.DomainObjects;
 using NSE.Order.Domain.Entities.Vouchers.Specs;
 
@@ -34,6 +35,9 @@ public class Voucher : Entity, IAggregateRoot
         Active = true;
         Used = false;
     }
+
+    public void Enable() => Active = true;
+    public void Disable() => Active = false;
     
     public bool CanUse()
     {
@@ -50,12 +54,18 @@ public class Voucher : Entity, IAggregateRoot
         Quantity = 0;
         UsedAt = DateTime.UtcNow;
     }
-
+    
     public void DebitQuantity()
     {
         Quantity -= 1;
         if (Quantity >= 1) return;
 
         SetAsUsed();
+    }
+    
+    public void ChangeExpirationDate(DateTime newDate)
+    {
+        if(newDate.Date < DateTime.UtcNow)
+            ExpirationDate = newDate;
     }
 }

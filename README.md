@@ -226,7 +226,7 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 - [x] Request/Response Pattern
 - [x] Pub/Sub Pattern
 - [ ] Event Sourcing
-- [ ] Testes Unitários
+- [x] Testes Unitários
 - [ ] Testes de Integração
 - [ ] Testes e2e
 - [ ] Rate Limiting
@@ -247,6 +247,11 @@ Responsável por orquestrar as chamadas relacionadas ao fluxo de compra, central
 
 ## 🛡️ Práticas DevSecOps
 Este projeto foi implementado práticas de DevSecOps, garantindo segurança em todas as etapas do ciclo de vida da aplicação (SDLC).
+
+### ♾️ Pipeline Geral (CI/CD)
+<p align="center">
+    <img src="docs/img/ci-cd.png" />
+</p>
 
 ### ⚙️ Pipeline de Segurança (CI/CD)
 
@@ -431,6 +436,26 @@ sudo nano /etc/hosts
 ```bash
 sh remove-nerdstore-cluster.sh
 ```
+
+## 🧪 Testes Automatizados
+Este projeto utiliza **testes unitários** para garantir maior confiabilidade, qualidade e segurança na evolução dos microsserviços.
+
+#### ▶️ Como executar os testes
+```bash
+dotnet test
+```
+
+#### ⬛ Terminal
+<p align="center">
+    <img src="docs/img/testes-terminal.png" />
+</p>
+
+#### 🟫 Rider
+<img src="docs/img/testes-unitarios.png" />
+
+#### 🟦 VS Code
+<img src="docs/img/testes-vscode.png" />
+
 
 ## ⚙️ Configurações para VS Code:
 

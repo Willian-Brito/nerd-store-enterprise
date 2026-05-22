@@ -22,27 +22,27 @@ public class CartItem
         Id = Guid.NewGuid();
     }
     
-    internal void SetShoppingCart(Guid carrinhoId)
+    public void SetShoppingCart(Guid carrinhoId)
     {
         ShoppingCartId = carrinhoId;
     }
 
-    internal decimal CalculatePrice()
+    public decimal CalculatePrice()
     {
         return Quantity * Price;
     }
 
-    internal void AddUnit(int quantity)
+    public void AddUnit(int quantity)
     {
         Quantity += quantity;
     }
 
-    internal void UpdateUnit(int quantity)
+    public void UpdateUnit(int quantity)
     {
         Quantity = quantity;
     }
 
-    internal bool IsValid()
+    public bool IsValid()
     {
         return new ShoppingCartItemValidation().Validate(this).IsValid;
     }

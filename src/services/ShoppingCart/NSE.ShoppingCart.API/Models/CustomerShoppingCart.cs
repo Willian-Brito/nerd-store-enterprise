@@ -5,7 +5,7 @@ namespace NSE.ShoppingCart.API.Models;
 
 public class CustomerShoppingCart
 {
-    internal const int MAX_ITEMS = 5;   
+    public const int MAX_ITEMS = 5;   
     public Guid Id { get; set; }
     public Guid CustomerId { get; set; }
     public decimal Total { get; set; }
@@ -24,7 +24,7 @@ public class CustomerShoppingCart
         Id = Guid.NewGuid();
         CustomerId = customerId;
     }
-    
+
     public void ApplyVoucher(Voucher voucher)
     {
         Voucher = voucher;
@@ -32,7 +32,7 @@ public class CustomerShoppingCart
         CalculateShoppingCartPrice();
     }
 
-    internal void CalculateShoppingCartPrice()
+    public void CalculateShoppingCartPrice()
     {
         Total = Items.Sum(p => p.CalculatePrice());
         CalculateDiscountPrice();
@@ -66,17 +66,17 @@ public class CustomerShoppingCart
         Discount = discount;
     }
 
-    internal bool HasItem(CartItem item)
+    public bool HasItem(CartItem item)
     {
         return Items.Any(p => p.ProductId == item.ProductId);
     }
 
-    internal CartItem GetProductById(Guid productId)
+    public CartItem GetProductById(Guid productId)
     {
         return Items.FirstOrDefault(p => p.ProductId == productId);
     }
 
-    internal void AddItem(CartItem item)
+    public void AddItem(CartItem item)
     {
         item.SetShoppingCart(Id);
 
@@ -93,7 +93,7 @@ public class CustomerShoppingCart
         CalculateShoppingCartPrice();
     }
 
-    internal void UpdateItem(CartItem item)
+    public void UpdateItem(CartItem item)
     {
         item.SetShoppingCart(Id);
         var existingItem = GetProductById(item.ProductId);
@@ -104,20 +104,20 @@ public class CustomerShoppingCart
         CalculateShoppingCartPrice();
     }
 
-    internal void UpdateUnit(CartItem item, int unities)
+    public void UpdateUnit(CartItem item, int unities)
     {
         item.UpdateUnit(unities);
         UpdateItem(item);
     }
 
-    internal void RemoveItem(CartItem item)
+    public void RemoveItem(CartItem item)
     {
         var existingItem = GetProductById(item.ProductId);
         Items.Remove(existingItem);
         CalculateShoppingCartPrice();
     }
 
-    internal bool IsValid()
+    public bool IsValid()
     {
         var errors = Items.SelectMany(i => new CartItem.ShoppingCartItemValidation().Validate(i).Errors).ToList();
         errors.AddRange(new CustomerShoppingCartValidation().Validate(this).Errors);

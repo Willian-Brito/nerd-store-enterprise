@@ -56,9 +56,9 @@ public class AddOrderCommand : Command
                 .NotNull()
                 .WithMessage("Holder name is required.");
 
-            RuleFor(c => c.SecurityCode.Length)
-                .GreaterThan(2)
-                .LessThan(5)
+            RuleFor(c => c.SecurityCode)
+                .NotEmpty()
+                .Length(3, 4)
                 .WithMessage("The security code must have at least 3 or 4 numbers.");
 
             RuleFor(c => c.ExpirationDate)
